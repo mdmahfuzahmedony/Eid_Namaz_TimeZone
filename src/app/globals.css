@@ -1,26 +1,29 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    /* লাইট মোড */
+    --background: #ffffff;
+    --foreground: #111827;
+    --primary: #facc15;      /* গোল্ডেন ইয়েলো */
+    --footer-bg: #f9fafb;   /* হালকা গ্রে (সাদা থেকে আলাদা) */
+    --footer-text: #4b5563;
+  }
+
+  .dark {
+    /* ডার্ক মোড */
+    --background: #020617;  /* আপনার মেইন ডার্ক কালার */
+    --foreground: #f3f4f6;
+    --primary: #facc15;      /* গোল্ডেন ইয়েলো */
+    --footer-bg: #0f172a;   /* ডার্ক নেভি শেড (গ্রিন কালার সরানো হয়েছে) */
+    --footer-text: #9ca3af;
   }
 }
 
 body {
-  background: var(--background);
+  background-color: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  margin: 0;
+  padding: 0;
 }

@@ -1,0 +1,39 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generate/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Masjid {
+  id        String   @id @default(cuid())
+  name      String
+  type      String // "মসজিদ" | "ঈদগাহ" | "মাঠ"
+  imamName  String?
+  mapLink   String?
+  imageUrl  String?
+  jamaat1   String
+  jamaat2   String?
+  approved  Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  // Location IDs
+  divisionId String
+  districtId String
+  upazilaId  String @default("")
+  unionId    String @default("")
+  gram       String @default("")
+
+  // Location names
+  divisionName String
+  districtName String
+  upazilaName  String @default("")
+  unionName    String @default("")
+}
+
+model user {
+  id   Int    @id @default(autoincrement())
+  name String
+}
