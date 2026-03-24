@@ -72,32 +72,16 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
     if (e.key === "Enter") handleSearch();
   };
 
-  // ── ড্রপডাউন অপশনগুলোর জন্য কমন ক্লাস (কালার ফিক্স করার জন্য) ──
   const optionStyle = "bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100";
 
-  // ── shared select style ──
-  const selectBase =
-    "flex-1 min-w-0 px-2.5 sm:px-3 py-3 sm:py-3.5 text-[11px] sm:text-xs outline-none " +
-    "bg-white dark:bg-[#111827] " +
-    "text-gray-800 dark:text-gray-100 " +
-    "disabled:opacity-40 disabled:cursor-not-allowed " +
-    "transition-colors duration-200 " +
-    "border-r border-gray-200 dark:border-white/[0.08] " +
-    "focus:ring-1 focus:ring-yellow-500/50 " + // সিলেকশন করলে বর্ডার হাইলাইট হবে
-    "appearance-none cursor-pointer";
+  // সবগুলো ক্লাস এক লাইনে করা হয়েছে
+  const selectBase = "flex-1 min-w-0 px-2.5 sm:px-3 py-3 sm:py-3.5 text-[11px] sm:text-xs outline-none bg-white dark:bg-[#111827] text-gray-800 dark:text-gray-100 disabled:opacity-40 disabled:cursor-not-allowed transition-colors duration-200 border-r border-gray-200 dark:border-white/[0.08] focus:ring-1 focus:ring-yellow-500/50 appearance-none cursor-pointer";
 
   return (
     <div
-      className="
-    w-full max-w-[95vw] sm:max-w-2xl
-    flex flex-col sm:flex-row
-    rounded-2xl overflow-hidden
-    shadow-2xl shadow-black/20
-    border border-gray-200 dark:border-white/10
-  "
+      className="w-full max-w-[95vw] sm:max-w-2xl flex flex-col sm:flex-row rounded-2xl overflow-hidden shadow-2xl shadow-black/20 border border-gray-200 dark:border-white/10"
       style={{ fontFamily: "var(--font-hind)" }}
     >
-      {/* বিভাগ + জেলা */}
       <div className="flex sm:contents">
         <select
           value={division}
@@ -123,7 +107,6 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
         </select>
       </div>
 
-      {/* উপজেলা + ইউনিয়ন */}
       <div className="flex sm:contents border-t border-gray-200 dark:border-white/[0.08] sm:border-0">
         <select
           value={upazila}
@@ -150,7 +133,6 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
         </select>
       </div>
 
-      {/* গ্রাম input + Button */}
       <div className="flex sm:contents border-t border-gray-200 dark:border-white/[0.08] sm:border-0">
         <input
           type="text"
@@ -159,31 +141,12 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
           onKeyDown={handleKey}
           placeholder="গ্রামের নাম"
           disabled={!union}
-          className="
-            flex-1 sm:flex-[0.8] px-3 py-3 sm:py-3.5
-            text-[11px] sm:text-xs outline-none
-            bg-white dark:bg-[#111827]
-            text-gray-800 dark:text-gray-100
-            placeholder:text-gray-400 dark:placeholder:text-gray-500
-            disabled:opacity-40 disabled:cursor-not-allowed
-            focus:ring-1 focus:ring-yellow-500/50
-            transition-colors duration-200
-            border-r border-gray-200 dark:border-white/[0.08]
-          "
+          className="flex-1 sm:flex-[0.8] px-3 py-3 sm:py-3.5 text-[11px] sm:text-xs outline-none bg-white dark:bg-[#111827] text-gray-800 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500 disabled:opacity-40 disabled:cursor-not-allowed focus:ring-1 focus:ring-yellow-500/50 transition-colors duration-200 border-r border-gray-200 dark:border-white/[0.08]"
         />
 
         <button
           onClick={handleSearch}
-          className="
-            flex items-center justify-center gap-1.5
-            bg-yellow-500 hover:bg-yellow-400 active:scale-95
-            text-gray-900 font-bold
-            text-[11px] sm:text-xs
-            px-4 sm:px-5 py-3 sm:py-3.5
-            transition-all duration-150
-            whitespace-nowrap
-            rounded-b-2xl sm:rounded-b-none sm:rounded-r-2xl
-          "
+          className="flex items-center justify-center gap-1.5 bg-yellow-500 hover:bg-yellow-400 active:scale-95 text-gray-900 font-bold text-[11px] sm:text-xs px-4 sm:px-5 py-3 sm:py-3.5 transition-all duration-150 whitespace-nowrap rounded-b-2xl sm:rounded-b-none sm:rounded-r-2xl"
         >
           <Search size={13} />
           <span>খুঁজুন</span>
