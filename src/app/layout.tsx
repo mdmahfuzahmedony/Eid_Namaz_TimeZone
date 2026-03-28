@@ -14,7 +14,8 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "ঈদের নামাজ সময়সূচি ২০২৬ - সারা বাংলাদেশ | Eid Jamat Time",
-  description: "বাংলাদেশের সকল জেলা, উপজেলা ও গ্রামের ঈদগাহ এবং মসজিদের ঈদের নামাজের সঠিক সময়সূচি ও জামাতের তথ্য এখন এক ক্লিকেই। আপনার এলাকার ঈদের জামাত খুঁজে নিন সহজেই।",
+  description:
+    "বাংলাদেশের সকল জেলা, উপজেলা ও গ্রামের ঈদগাহ এবং মসজিদের ঈদের নামাজের সঠিক সময়সূচি ও জামাতের তথ্য এখন এক ক্লিকেই। আপনার এলাকার ঈদের জামাত খুঁজে নিন সহজেই।",
   keywords: [
     "ঈদের নামাজ সময়সূচি",
     "Eid Namaz Time Bangladesh",
@@ -24,9 +25,13 @@ export const metadata: Metadata = {
     "গ্রামের ঈদের নামাজ",
     "Eid-ul-Fitr Prayer Time",
   ],
-  authors: [{ name: "আপনার নাম" }], // এখানে আপনার নাম দিতে পারেন
+
+  authors: [{ name: "Mahfuz Ahmed" }], // এখানে আপনার নাম দিতে পারেন
   icons: {
-    icon: "/favicon.ico", // আপনার যদি কোনো আইকন থাকে
+    icon: [
+      { url: "/logo.png", sizes: "32x32", type: "image/png" },
+      { url: "/logo.png", sizes: "192x192", type: "image/png" }, // বড় আইকন সাপোর্ট
+    ],
   },
 };
 
@@ -38,8 +43,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="bn" suppressHydrationWarning> 
-      <body 
+    <html lang="bn" suppressHydrationWarning>
+      <body
         className="..." // আপনার যা ক্লাস আছে তা থাকবে
         suppressHydrationWarning={true} // এই লাইনটি যোগ করুন
       >

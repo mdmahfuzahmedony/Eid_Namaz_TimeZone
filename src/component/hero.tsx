@@ -56,13 +56,13 @@ export default function Hero({
           ${compact ? "min-h-[90px]" : "min-h-[500px] sm:min-h-[560px]"} 
           bg-black`}
       >
-        {/* Background Image with Ken Burns - Fixed dark look for both modes */}
+        {/* Background Image with Ken Burns */}
         <div 
           className="absolute inset-0 z-0 animate-kenburns bg-cover bg-center bg-no-repeat"
           style={{ backgroundImage: "url('/hero-bg.jpg')" }} 
         />
 
-        {/* Fixed Dark Overlay: লাইট মোডেও ডার্কনেস বজায় রাখবে */}
+        {/* Fixed Dark Overlay */}
         <div className="absolute inset-0 z-[1] bg-black/50" />
 
         {/* Bottom Fade */}
@@ -76,19 +76,25 @@ export default function Hero({
 
         {/* TOP BAR */}
         <div className="relative z-10 w-full">
-          <div className="max-w-[1400px] mx-auto flex items-center justify-between px-4 sm:px-6 py-3.5">
+          <div className="max-w-[1400px]  mx-auto  flex items-center justify-between px-4  py-3.5">
             <div
-              className="flex items-center gap-2 cursor-pointer group"
+              className="flex items-center gap-3  cursor-pointer group"
               onClick={() => router.push("/")}
             >
-              <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-white/20 backdrop-blur-md border border-white/30 flex items-center justify-center text-white text-lg shadow-lg">
-                ع
+              {/* FIXED LOGO CONTAINER: সাইজ বাড়ানো হয়েছে */}
+              <div className="relative  w-14 h-14 sm:w-20 sm:h-20 flex items-start justify-items-start overflow-hidden">
+                <img 
+                  src="/logo.png" 
+                  alt="Logo" 
+                  className="w-full left-0 h-full object-contain scale-110 group-hover:scale-125 transition-transform duration-300"
+                />
               </div>
-              <div className="hero-text-shadow hidden xs:block">
-                <div className="text-white font-bold text-xs sm:text-sm leading-tight tracking-wide">
+
+              <div className="hero-text-shadow  hidden xs:block">
+                <div className="text-white font-bold text-sm sm:text-base leading-tight tracking-wide">
                   ঈদের নামাজ
                 </div>
-                <div className="text-white/60 text-[9px]">সারা বাংলাদেশ</div>
+                <div className="text-white/60 text-[10px] sm:text-xs">সারা বাংলাদেশ</div>
               </div>
             </div>
 
@@ -112,14 +118,12 @@ export default function Hero({
 
         {/* HERO CONTENT */}
         {!compact && (
-          <div className="relative z-10 flex flex-col items-center text-center px-4 sm:px-6 pb-16 flex-1 justify-center">
+          <div className="relative z-10 flex flex-col  mt-6 items-center text-center px-4 sm:px-6 pb-16 flex-1 justify-center">
             
-            {/* Floating Badge (Small Font) */}
             <div className="animate-float inline-flex items-center gap-1.5 bg-white/10 backdrop-blur-md border border-white/20 text-yellow-300 text-[10px] sm:text-[11px] font-medium px-3.5 py-1.5 rounded-full mb-5 tracking-wider">
               🌙 ঈদুল ফিতর ২০২৬
             </div>
 
-            {/* Title (Smaller Font) */}
             <h1
               className="text-white font-bold leading-[1.3] mb-4 hero-text-shadow text-[1.75rem] sm:text-[2.2rem] md:text-[2.6rem]"
               style={{ fontFamily: "var(--font-noto)" }}
@@ -129,18 +133,16 @@ export default function Hero({
               <span className="text-yellow-400">নামাজের সময়</span> খুঁজুন
             </h1>
 
-            {/* Subtitle (Smaller Font) */}
             <p className="text-white/80 text-[12px] sm:text-[14px] mb-8 max-w-sm leading-relaxed hero-text-shadow">
-              জেলা থেকে গ্রাম পর্যন্ত — সব ঈদগাহ ও মসজিদের সময়সূচি এবং জামাতের
+              জেলা থেকে গ্রাম পর্যন্ত — সব ঈদগাহ ও মসজিদের সময়সূচি এবং জামাতের
               তথ্য এখন এক ক্লিকেই।
             </p>
 
-            {/* Search Bar (Original Style - No extra background) */}
             <div className="w-full flex justify-center transform hover:scale-[1.01] transition-transform duration-300">
               <SearchBar onSearch={onSearch} />
             </div>
 
-            {/* Statistics (Smaller Font) */}
+            {/* Statistics */}
             <div className="flex gap-8 sm:gap-14 mt-10">
               {[
                 { num: "১,২৪৩", label: "মসজিদ ও ঈদগাহ" },

@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { createMasjid } from "@/app/actions/masjidActions"; 
 import { toast, ToastContainer } from "react-toastify"; 
 import "react-toastify/dist/ReactToastify.css";
-import { MapPin, Image as ImageIcon, User, Clock, Building2, Loader2, ChevronRight } from "lucide-react";
+import { MapPin, Image as ImageIcon, User, Clock, Building2, Loader2, ChevronRight, Hash } from "lucide-react";
 
 import divisionsData from "@/app/data/divisions.json";
 import districtsData from "@/app/data/districts.json";
@@ -65,7 +65,7 @@ export default function AddMasjid() {
 
   const handleSubmit = async () => {
     if (!name || !districtId || !jamaat1) {
-      toast.warning("প্রয়োজনীয় তথ্যগুলো পূরণ করুন");
+      toast.warning("প্রয়োজনীয় তথ্যগুলো পূরণ করুন");
       return;
     }
     setLoading(true);
@@ -79,108 +79,103 @@ export default function AddMasjid() {
         unionName: allUnions.find((u) => u.id === unionId)?.bn_name || "",
       });
       if (result.success) {
-        toast.success("সফলভাবে যোগ করা হয়েছে! হোমে রিডাইরেক্ট করা হচ্ছে...");
+        toast.success("সফলভাবে যোগ করা হয়েছে! হোমে রিডাইরেক্ট করা হচ্ছে...");
         setTimeout(() => router.push("/"), 2500);
       } else {
-        toast.error("ভুল হয়েছে: " + result.error);
+        toast.error("ভুল হয়েছে: " + result.error);
       }
     } catch (err) {
-      toast.error("সার্ভারে সমস্যা হয়েছে।");
+      toast.error("সার্ভারে সমস্যা হয়েছে।");
     } finally {
       setLoading(false);
     }
   };
 
-  // থিম ভিত্তিক ইয়েলো ক্লাসসমূহ
-  const inputClass = "mt-1.5 w-full border border-gray-200 dark:border-slate-800 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-[#facc15] focus:ring-2 focus:ring-[#facc15]/20 bg-white dark:bg-[#0f172a] text-gray-900 dark:text-gray-100 transition-all";
-  const selectClass = "mt-1.5 w-full border border-gray-200 dark:border-slate-800 rounded-xl px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-[#facc15] focus:border-[#facc15] bg-white dark:bg-[#0f172a] text-gray-900 dark:text-gray-100 disabled:opacity-40 transition-all cursor-pointer";
-  const labelClass = "text-[11px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest flex items-center gap-1.5 ml-1";
+  // থিম ভিত্তিক ইয়েলো ক্লাসসমূহ
+  const inputContainer = "relative flex flex-col w-full";
+  const inputClass = "mt-1.5 w-full border border-gray-200 dark:border-slate-800 rounded-xl px-4 py-3 text-sm outline-none focus:border-[#facc15] focus:ring-4 focus:ring-[#facc15]/10 bg-white dark:bg-[#0f172a] text-gray-900 dark:text-gray-100 transition-all hover:border-[#facc15]/50";
+  const selectClass = "mt-1.5 w-full border border-gray-200 dark:border-slate-800 rounded-xl px-4 py-3 text-sm outline-none focus:ring-4 focus:ring-[#facc15]/10 focus:border-[#facc15] bg-white dark:bg-[#0f172a] text-gray-900 dark:text-gray-100 disabled:opacity-40 transition-all cursor-pointer hover:border-[#facc15]/50 appearance-none";
+  const labelClass = "text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest flex items-center gap-1.5 ml-1";
 
   return (
-    <div className="bg-transparent px-2 py-6">
-      {/* ── ব্রাউজারের নীল রঙ সরানোর জন্য অতিরিক্ত CSS ── */}
+    <div className="bg-transparent px-2 py-4">
+      {/* ── ব্রাউজারের ডিফল্ট নীল রঙ সরানোর স্টাইল ── */}
       <style>{`
-        /* অপশন ট্যাগগুলোকে থিমের ডার্ক কালার দেওয়া */
         select option {
-          background-color: #0f172a !important;
+          background-color: #1e293b !important;
           color: white !important;
-          padding: 10px;
         }
-
-        /* ফোকাস করলে নীল আউটলাইন রিমুভ করা */
-        select:focus, input:focus {
-          outline: none !important;
-          box-shadow: 0 0 0 2px rgba(250, 204, 21, 0.2) !important;
-        }
-
-        /* উইন্ডোজ ব্রাউজারে সিলেকশন কালার চেঞ্জ করার চেষ্টা */
-        select::-ms-expand { display: none; }
+        /* Tap highlight color remove for mobile */
+        * { -webkit-tap-highlight-color: transparent; }
         
-        /* কিছু ব্রাউজারে অপশন সিলেকশন ফিক্স */
-        select option:checked {
-          background: #facc15 linear-gradient(0deg, #facc15 0%, #facc15 100%) !important;
-          color: black !important;
+        input:focus, select:focus {
+            box-shadow: 0 0 0 4px rgba(250, 204, 21, 0.1) !important;
+            border-color: #facc15 !important;
         }
       `}</style>
 
       <ToastContainer theme="colored" position="top-center" autoClose={2500} />
 
       <div className="max-w-xl mx-auto">
-        <div className="flex items-center gap-4 mb-8">
-          <div className="w-12 h-12 bg-[#facc15]/10 rounded-2xl flex items-center justify-center text-[#facc15]">
-            <Building2 size={28} />
+        <div className="flex flex-col items-center text-center mb-8">
+          <div className="w-16 h-16 bg-[#facc15]/10 rounded-2xl flex items-center justify-center text-[#facc15] mb-4 shadow-lg shadow-[#facc15]/5 border border-[#facc15]/20">
+            <Building2 size={32} />
           </div>
-          <div>
-            <h1 className="text-xl font-bold text-gray-900 dark:text-white">নতুন তথ্য যোগ করুন</h1>
-            <p className="text-xs text-gray-500">আপনার এলাকার সঠিক তথ্য দিয়ে সহযোগিতা করুন</p>
-          </div>
+          <h1 className="text-2xl font-black text-gray-900 dark:text-white tracking-tight">নতুন তথ্য যোগ করুন</h1>
+          <p className="text-xs text-gray-500 mt-1">সঠিক তথ্য দিয়ে অন্যকে সাহায্য করুন</p>
         </div>
 
-        <div className="space-y-6">
-          {/* নাম ও ধরন */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <div className="sm:col-span-2">
-              <label className={labelClass}><Building2 size={13}/> নাম *</label>
-              <input value={name} onChange={(e) => setName(e.target.value)} placeholder="নাম লিখুন" className={inputClass} />
+        <div className="space-y-5">
+          {/* নাম ও ধরন - মোবাইল ভিউতে স্ট্যাক হবে */}
+          <div className="flex flex-col gap-4">
+            <div className={inputContainer}>
+              <label className={labelClass}><Building2 size={12}/> প্রতিষ্ঠানের নাম *</label>
+              <input value={name} onChange={(e) => setName(e.target.value)} placeholder="উদা: বাইতুল মামুর মসজিদ" className={inputClass} />
             </div>
-            <div>
-              <label className={labelClass}>ধরন *</label>
-              <select value={type} onChange={(e) => setType(e.target.value)} className={selectClass}>
-                <option value="মসজিদ">মসজিদ</option>
-                <option value="ঈদগাহ">ঈদগাহ</option>
-                <option value="মাঠ">মাঠ</option>
-              </select>
+            <div className={inputContainer}>
+              <label className={labelClass}><Hash size={12}/> ধরন নির্বাচন করুন *</label>
+              <div className="relative">
+                <select value={type} onChange={(e) => setType(e.target.value)} className={selectClass}>
+                  <option value="মসজিদ">মসজিদ</option>
+                  <option value="ঈদগাহ">ঈদগাহ</option>
+                  <option value="মাঠ">মাঠ</option>
+                </select>
+                <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
+                    <ChevronRight size={16} className="rotate-90" />
+                </div>
+              </div>
             </div>
           </div>
 
           {/* লোকেশন কার্ড */}
-          <div className="bg-gray-50 dark:bg-[#0f172a]/40 p-5 rounded-2xl border border-gray-100 dark:border-slate-800 space-y-4">
-            <h2 className="text-xs font-black text-[#facc15] flex items-center gap-2 uppercase tracking-tighter">
-              <MapPin size={14} /> লোকেশন ডিটেইলস
+          <div className="bg-gray-50/50 dark:bg-[#0f172a]/40 p-5 rounded-3xl border border-gray-100 dark:border-slate-800/50 space-y-4 shadow-inner">
+            <h2 className="text-[10px] font-black text-[#facc15] flex items-center gap-2 uppercase tracking-[0.2em] mb-2">
+              <MapPin size={12} /> লোকেশন ডিটেইলস
             </h2>
-            <div className="grid grid-cols-2 gap-4">
-              <div>
+            
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className={inputContainer}>
                 <label className={labelClass}>বিভাগ</label>
                 <select value={divisionId} onChange={(e) => setDivisionId(e.target.value)} className={selectClass}>
                   <option value="">সিলেক্ট করুন</option>
                   {allDivisions.map((d) => <option key={d.id} value={d.id}>{d.bn_name}</option>)}
                 </select>
               </div>
-              <div>
+              <div className={inputContainer}>
                 <label className={labelClass}>জেলা *</label>
                 <select value={districtId} onChange={(e) => setDistrictId(e.target.value)} disabled={!divisionId} className={selectClass}>
                   <option value="">সিলেক্ট করুন</option>
                   {districts.map((d) => <option key={d.id} value={d.id}>{d.bn_name}</option>)}
                 </select>
               </div>
-              <div>
+              <div className={inputContainer}>
                 <label className={labelClass}>উপজেলা</label>
                 <select value={upazilaId} onChange={(e) => setUpazilaId(e.target.value)} disabled={!districtId} className={selectClass}>
                   <option value="">সিলেক্ট করুন</option>
                   {upazilas.map((u) => <option key={u.id} value={u.id}>{u.bn_name}</option>)}
                 </select>
               </div>
-              <div>
+              <div className={inputContainer}>
                 <label className={labelClass}>ইউনিয়ন</label>
                 <select value={unionId} onChange={(e) => setUnionId(e.target.value)} disabled={!upazilaId} className={selectClass}>
                   <option value="">সিলেক্ট করুন</option>
@@ -188,25 +183,25 @@ export default function AddMasjid() {
                 </select>
               </div>
             </div>
-            <div>
-              <label className={labelClass}><MapPin size={13}/> গ্রাম / এলাকা</label>
-              <input value={gram} onChange={(e) => setGram(e.target.value)} placeholder="গ্রামের নাম" className={inputClass} />
+            <div className={inputContainer}>
+              <label className={labelClass}><MapPin size={12}/> গ্রাম / এলাকা</label>
+              <input value={gram} onChange={(e) => setGram(e.target.value)} placeholder="উদা: উত্তর পাড়া" className={inputClass} />
             </div>
           </div>
 
-          {/* ইমাম ও সময় */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label className={labelClass}><User size={13}/> ইমামের নাম (ঐচ্ছিক)</label>
+          {/* ইমাম ও সময় */}
+          <div className="flex flex-col gap-4">
+            <div className={inputContainer}>
+              <label className={labelClass}><User size={12}/> ইমামের নাম (ঐচ্ছিক)</label>
               <input value={imamName} onChange={(e) => setImamName(e.target.value)} placeholder="ইমামের নাম লিখুন" className={inputClass} />
             </div>
-            <div className="grid grid-cols-2 gap-2">
-              <div>
-                <label className={labelClass}><Clock size={13}/> ১ম জামাত *</label>
+            <div className="grid grid-cols-2 gap-3">
+              <div className={inputContainer}>
+                <label className={labelClass}><Clock size={12}/> ১ম জামাত *</label>
                 <input type="time" value={jamaat1} onChange={(e) => setJamaat1(e.target.value)} className={inputClass} />
               </div>
-              <div>
-                <label className={labelClass}><Clock size={13}/> ২য় জামাত</label>
+              <div className={inputContainer}>
+                <label className={labelClass}><Clock size={12}/> ২য় জামাত</label>
                 <input type="time" value={jamaat2} onChange={(e) => setJamaat2(e.target.value)} className={inputClass} />
               </div>
             </div>
@@ -214,13 +209,13 @@ export default function AddMasjid() {
 
           {/* লিংক সমূহ */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label className={labelClass}><MapPin size={13}/> গুগল ম্যাপ লিংক</label>
-              <input value={mapLink} onChange={(e) => setMapLink(e.target.value)} placeholder="গুগল ম্যাপ লিংক (ঐচ্ছিক)" className={inputClass} />
+            <div className={inputContainer}>
+              <label className={labelClass}><MapPin size={12}/> গুগল ম্যাপ লিংক</label>
+              <input value={mapLink} onChange={(e) => setMapLink(e.target.value)} placeholder="লিংক পেস্ট করুন" className={inputClass} />
             </div>
-            <div>
-              <label className={labelClass}><ImageIcon size={13}/> ছবির ইউআরএল</label>
-              <input value={imageUrl} onChange={(e) => setImageUrl(e.target.value)} placeholder="ছবির ডিরেক্ট লিংক (ঐচ্ছিক)" className={inputClass} />
+            <div className={inputContainer}>
+              <label className={labelClass}><ImageIcon size={12}/> ছবির ইউআরএল</label>
+              <input value={imageUrl} onChange={(e) => setImageUrl(e.target.value)} placeholder="ছবির ডিরেক্ট লিংক" className={inputClass} />
             </div>
           </div>
 
@@ -228,15 +223,19 @@ export default function AddMasjid() {
           <button
             onClick={handleSubmit}
             disabled={loading}
-            className="w-full flex items-center justify-center gap-2 bg-[#facc15] hover:bg-[#eab308] text-gray-900 py-4 rounded-2xl text-base font-black transition-all shadow-[0_10px_20px_rgba(250,204,21,0.2)] active:scale-[0.98] disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed group mt-4"
+            className="w-full flex items-center justify-center gap-3 bg-[#facc15] hover:bg-[#eab308] text-gray-900 py-4 rounded-2xl text-base font-black transition-all shadow-xl shadow-[#facc15]/20 active:scale-[0.96] disabled:bg-gray-200 dark:disabled:bg-slate-800 disabled:text-gray-400 disabled:cursor-not-allowed group mt-6"
           >
             {loading ? (
-              <><Loader2 className="animate-spin" size={20} /><span>অপেক্ষা করুন...</span></>
+              <><Loader2 className="animate-spin" size={20} /><span>তথ্য আপলোড হচ্ছে...</span></>
             ) : (
-              <><span>তথ্য জমা দিন</span><ChevronRight size={18} className="group-hover:translate-x-1 transition-transform" /></>
+              <><span>তথ্য জমা দিন</span><ChevronRight size={20} className="group-hover:translate-x-1 transition-transform" /></>
             )}
           </button>
+
+          
         </div>
+
+        
       </div>
     </div>
   );

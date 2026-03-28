@@ -7,15 +7,21 @@ export default function Footer() {
         
         {/* লোগো সেকশন */}
         <div className="flex items-center gap-2 text-foreground">
-          <span className="text-xl font-bold text-[var(--primary)]">ع</span>
-          <span className="font-bold text-base tracking-wide">ঈদের নামাজ</span>
+            <div className="relative w-14 h-14 sm:w-20 sm:h-20 flex items-center justify-center overflow-hidden">
+                <img 
+                  src="/logo.png" 
+                  alt="Logo" 
+                  className="w-full h-full object-contain scale-110 group-hover:scale-125 transition-transform duration-300"
+                />
+              </div>
+         
         </div>
 
         {/* ডেসক্রিপশন */}
         <p className="opacity-80">সারা বাংলাদেশের ঈদগাহ ও মসজিদের সময়সূচি</p>
         
         {/* কপিরাইট ও ক্রেডিট */}
-        <div className="flex flex-col gap-1 mt-2">
+        <div className="flex flex-col gap-1 ">
           <p className="opacity-60">© ২০২৬ — সবার জন্য বিনামূল্যে</p>
           <p className="opacity-60">
             তৈরি করেছেন{" "}
