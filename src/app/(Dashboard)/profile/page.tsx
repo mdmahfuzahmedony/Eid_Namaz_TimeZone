@@ -9,7 +9,6 @@ import AddMasjid from "@/component/addMasjid";
 import { getUserMasjids, deleteMasjid } from "@/app/actions/masjidActions";
 import { updateUserProfile } from "@/app/actions/users"; 
 
-// নতুন কম্পোনেন্টগুলো ইমপোর্ট করো
 import DashboardHeader from "@/component/dashboard/DashboardHeader";
 import DashboardSidebar from "@/component/dashboard/DashboardSidebar";
 import MyMasjidList from "@/component/dashboard/MyMasjidList";
@@ -28,10 +27,13 @@ export default function DashboardPage() {
 
   const EID_DATE = "2026-05-27T00:00:00";
 
+  // ১. ডাটা ফেচ করার সময় ইউজার আইডি হ্যান্ডেল করা
   const fetchData = async () => {
-    if (session?.user?.id) {
+    const userId = (session?.user as any)?.id; // any কাস্টিং
+
+    if (userId) {
       setLoadingData(true);
-      const result = await getUserMasjids(session.user.id as string);
+      const result = await getUserMasjids(userId);
       if (result.success) setMyMasjids(result.data);
       setLoadingData(false);
     }
@@ -42,7 +44,7 @@ export default function DashboardPage() {
     if (session?.user) {
       setProfileData(prev => ({ ...prev, name: session.user?.name || "", image: session.user?.image || "" }));
     }
-  }, [session?.user?.id]);
+  }, [session?.user]);
 
   const handleDelete = async (id: string) => {
     if (confirm("আপনি কি নিশ্চিতভাবে এটি ডিলিট করতে চান?")) {
@@ -51,8 +53,16 @@ export default function DashboardPage() {
     }
   };
 
+  // ২. প্রোফাইল আপডেট করার সময় আইডি ফিক্স করা
   const handleProfileUpdate = async (e: React.FormEvent) => {
     e.preventDefault();
+    const userId = (session?.user as any)?.id; // এখানেও কাস্টিং লাগবে
+
+    if (!userId) {
+        toast.error("ইউজার আইডি পাওয়া যায়নি!");
+        return;
+    }
+
     setProfileLoading(true);
     try {
       let finalImageUrl = profileData.image;
@@ -62,26 +72,36 @@ export default function DashboardPage() {
         const uploadedUrl = await uploadImage(formData);
         if (uploadedUrl) finalImageUrl = uploadedUrl;
       }
-      const res = await updateUserProfile({ userId: session?.user?.id, name: profileData.name, image: finalImageUrl, password: profileData.password, newPassword: profileData.newPassword });
+
+      const res = await updateUserProfile({ 
+        userId: userId, // ফিক্সড আইডি
+        name: profileData.name, 
+        image: finalImageUrl, 
+        password: profileData.password, 
+        newPassword: profileData.newPassword 
+      });
+
       if (res.success) {
         toast.success("প্রোফাইল আপডেট হয়েছে! 🚀");
         await update({ ...session, user: { ...session?.user, name: profileData.name, image: finalImageUrl } });
         setProfileData(prev => ({ ...prev, password: "", newPassword: "" }));
         setSelectedFile(null);
-      } else toast.error(res.error);
-    } catch (err) { toast.error("সমস্যা হয়েছে"); }
-    finally { setProfileLoading(false); }
+      } else {
+        toast.error(res.error);
+      }
+    } catch (err) { 
+      toast.error("সমস্যা হয়েছে"); 
+    } finally { 
+      setProfileLoading(false); 
+    }
   };
 
   return (
     <div className="min-h-screen w-full bg-transparent text-white font-sans overflow-x-hidden pb-20">
       <div className="max-w-[1400px] mx-auto px-4 py-10">
-        
         <DashboardHeader session={session} eidDate={EID_DATE} />
-
         <div className="flex flex-col lg:flex-row gap-8">
           <DashboardSidebar activeTab={activeTab} setActiveTab={setActiveTab} />
-
           <main className="flex-1 min-h-[700px] bg-slate-900/40 backdrop-blur-3xl rounded-[3rem] p-6 sm:p-10 border border-white/10 shadow-2xl">
             {activeTab === "listings" && <MyMasjidList masjids={myMasjids} loading={loadingData} onEdit={(m: any) => { setEditMasjid(m); setActiveTab("edit"); }} onDelete={handleDelete} />}
             
@@ -95,7 +115,16 @@ export default function DashboardPage() {
               </div>
             )}
 
-            {activeTab === "profile" && <ProfileSettings profileData={profileData} setProfileData={setProfileData} onUpdate={handleProfileUpdate} loading={profileLoading} selectedFile={selectedFile} setSelectedFile={setSelectedFile} />}
+            {activeTab === "profile" && (
+              <ProfileSettings 
+                profileData={profileData} 
+                setProfileData={setProfileData} 
+                onUpdate={handleProfileUpdate} 
+                loading={profileLoading} 
+                selectedFile={selectedFile} 
+                setSelectedFile={setSelectedFile} 
+              />
+            )}
           </main>
         </div>
       </div>
