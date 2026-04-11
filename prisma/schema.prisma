@@ -5,36 +5,51 @@ generator client {
 datasource db {
   provider = "postgresql"
 
- 
 }
 
+model User {
+  id           String   @id @default(cuid())
+  name         String
+  phoneNumber  String   @unique
+  password     String
+  image        String?  
+  
+  // নতুন যোগ করা ফিল্ডসমূহ
+  division     String?
+  district     String?
+  upazila      String?
+  union        String?
+
+  createdAt    DateTime @default(now())
+  masjids      Masjid[]
+}
 model Masjid {
   id           String   @id @default(cuid())
   name         String
-  type         String   // "মসজিদ" | "ঈদগাহ" | "মাঠ"
+  type         String   
   imamName     String?
   mapLink      String?
   imageUrl     String?
-  jamaat1      String
+  jamaat1      String?  
   jamaat2      String?
-  approved     Boolean  @default(true)
+  
+  // ✅ নতুন যোগ করা হলো
+  isPublished  Boolean  @default(false) 
+  
+  approved     Boolean  @default(true) 
   createdAt    DateTime @default(now())
 
-  // Location IDs
+  // লোকেশন ডাটা (আগের মতোই থাকবে)
   divisionId   String
   districtId   String
   upazilaId    String   @default("")
   unionId      String   @default("")
   gram         String   @default("")
-
-  // Location names
   divisionName String
   districtName String
   upazilaName  String   @default("")
   unionName    String   @default("")
-} 
 
-model User { // নামটা বড় হাতের দিন (PascalCase)
-  id   Int    @id @default(autoincrement())
-  name String
+  userId       String
+  user         User     @relation(fields: [userId], references: [id])
 }

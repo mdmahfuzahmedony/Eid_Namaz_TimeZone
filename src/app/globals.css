@@ -2,28 +2,88 @@
 
 @layer base {
   :root {
-    /* লাইট মোড */
     --background: #ffffff;
     --foreground: #111827;
-    --primary: #facc15;      /* গোল্ডেন ইয়েলো */
-    --footer-bg: #f9fafb;   /* হালকা গ্রে (সাদা থেকে আলাদা) */
-    --footer-text: #4b5563;
+    --primary: #facc15;
   }
 
   .dark {
-    /* ডার্ক মোড */
-    --background: #020617;  /* আপনার মেইন ডার্ক কালার */
+    --background: #020617;
     --foreground: #f3f4f6;
-    --primary: #facc15;      /* গোল্ডেন ইয়েলো */
-    --footer-bg: #0f172a;   /* ডার্ক নেভি শেড (গ্রিন কালার সরানো হয়েছে) */
-    --footer-text: #9ca3af;
+    --primary: #facc15;
   }
 }
 
+/* globals.css */
+
+@keyframes slowZoom {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.15); } /* ১৫% জুম হবে */
+  100% { transform: scale(1); }
+}
+
+.animate-slow-zoom {
+  animation: slowZoom 40s ease-in-out infinite; /* ৪০ সেকেন্ড পর পর লুপ হবে */
+  will-change: transform;
+}
+
+/* ════════════════════════════════════════════════
+   বডি এবং গ্লোবাল ব্যাকগ্রাউন্ড সেটিংস
+   ════════════════════════════════════════════════ */
 body {
-  background-color: var(--background);
-  color: var(--foreground);
-  transition: background-color 0.3s ease, color 0.3s ease;
   margin: 0;
   padding: 0;
+  min-height: 100vh;
+  color: var(--foreground);
+  /* background-color: #020617;  */
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  transition: background-image 0.7s ease-in-out, background-color 0.3s ease;
+}
+
+/* ════════════════════════════════════════════════
+   সেকশন ট্রান্সপারেন্সি (শুধুমাত্র লেআউট কন্টেইনার)
+   ════════════════════════════════════════════════ */
+/* শুধু মেইন স্ট্রাকচারগুলো ট্রান্সপারেন্ট হবে যাতে ব্যাকগ্রাউন্ড দেখা যায় */
+main, 
+section, 
+header, 
+nav {
+  background-color: transparent !important;
+}
+
+/* ফুটার স্টাইল */
+footer {
+  background-color: rgba(2, 6, 23, 0.7) !important;
+  backdrop-blur: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* ════════════════════════════════════════════════
+   কার্ড এবং ড্রপডাউন প্রোটেকশন
+   ════════════════════════════════════════════════ */
+/* আমরা চাই কার্ডগুলো ডার্ক থাকুক যাতে লেখা পড়া যায়। 
+   তাই আগের div[class*="bg-"] রুলটি এখান থেকে সরিয়ে দেওয়া হয়েছে। */
+
+.glass-card {
+  background: rgba(15, 23, 42, 0.9) !important; /* কার্ডের জন্য সলিড ডার্ক শেড */
+  backdrop-blur: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* ════════════════════════════════════════════════
+   ইউটিলিটি ক্লাস
+   ════════════════════════════════════════════════ */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #eab308;
+  border-radius: 10px;
+}
+
+.hero-text-shadow {
+  text-shadow: 0 4px 12px rgba(0, 0, 0, 0.9);
 }

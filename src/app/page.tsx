@@ -2,18 +2,23 @@
 
 import { useState, useEffect } from "react";
 import Hero from "@/component/hero";
+import Footer from "@/component/footer";
 import MasjidList from "@/component/MasjidList";
-import Footer from './../component/footer';
 
 export default function Home() {
   const [searchFilters, setSearchFilters] = useState<null | any>(null);
   const [darkMode, setDarkMode] = useState(false);
+  const [lang, setLang] = useState("bn");
 
   useEffect(() => {
+    // ✅ Page load এ saved theme apply করা
     const savedTheme = localStorage.getItem("theme");
     if (savedTheme === "dark") {
       setDarkMode(true);
       document.documentElement.classList.add("dark");
+    } else {
+      // light mode নিশ্চিত করা
+      document.documentElement.classList.remove("dark");
     }
   }, []);
 
@@ -30,7 +35,7 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen transition-colors duration-500 bg-background text-foreground">
+    <main className="min-h-screen transition-colors duration-500 bg-[var(--background)] text-[var(--foreground)]">
       <Hero
         darkMode={darkMode}
         toggleDark={toggleTheme}
@@ -41,7 +46,7 @@ export default function Home() {
         <MasjidList searchFilters={searchFilters} />
       </div>
 
-      <Footer />
+      <Footer language={lang} key={lang} />
     </main>
   );
 }
