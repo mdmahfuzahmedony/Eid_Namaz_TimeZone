@@ -55,11 +55,11 @@ nav {
 }
 
 /* ফুটার স্টাইল */
-footer {
+/* footer {
   background-color: rgba(2, 6, 23, 0.7) !important;
   backdrop-blur: 12px;
   border-top: 1px solid rgba(255, 255, 255, 0.05);
-}
+} */
 
 /* ════════════════════════════════════════════════
    কার্ড এবং ড্রপডাউন প্রোটেকশন
