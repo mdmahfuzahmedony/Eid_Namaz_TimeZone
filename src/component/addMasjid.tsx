@@ -103,7 +103,7 @@ export default function AddMasjid({ language = "bn", editData, onSuccess }: Prop
         userId:       userId,
       };
 
-      let result = editData ? await updateMasjid(editData.id, masjidData) : await createMasjid(masjidData);
+      const result:any = editData ? await updateMasjid(editData.id, masjidData) : await createMasjid(masjidData);
 
       if (!result.success && result.isDuplicate) {
         setDuplicateOwner(result.owner);
