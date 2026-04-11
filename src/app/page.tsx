@@ -37,9 +37,6 @@ export default function Home() {
   return (
     <main className="min-h-screen transition-colors duration-500 bg-[var(--background)] text-[var(--foreground)]">
       <Hero
-        darkMode={darkMode}
-        toggleDark={toggleTheme}
-        onSearch={(filters) => setSearchFilters(filters)}
       />
 
       <div className="container mx-auto py-4">

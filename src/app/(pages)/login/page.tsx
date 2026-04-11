@@ -61,7 +61,7 @@ export default function AuthPage() {
     const upzName = upazilasData.find(u => u.id === upzId)?.bn_name || "";
     setFormData({ ...formData, upazila: upzName, union: "" });
     if (upzId) {
-      const unns = unionsData.filter(un => String(un.upazila_id) === String(upzId) || String(un.upazilla_id) === String(upzId));
+      const unns = unionsData.filter(un => String(un.upazilla_id) === String(upzId) || String(un.upazilla_id) === String(upzId));
       setFilteredUnions(unns);
     } else setFilteredUnions([]);
   };
