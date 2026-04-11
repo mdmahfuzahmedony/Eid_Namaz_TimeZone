@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { LayoutDashboard, PlusSquare, Settings, LogOut, AlertCircle } from "lucide-react";
 import { signOut } from "next-auth/react";
-import ConfirmModal from "../ConfirmModal"; // নতুন কম্পোনেন্টটি ইমপোর্ট করো
+import ConfirmModal from "../ConfirmModal"; 
 
 export default function DashboardSidebar({ activeTab, setActiveTab }: any) {
   const [showLogoutModal, setShowLogoutModal] = useState(false);
@@ -44,7 +44,9 @@ export default function DashboardSidebar({ activeTab, setActiveTab }: any) {
         </div>
       </aside>
 
-      {/* রিইউজেবল মোডাল ব্যবহার */}
+
+
+     
       <ConfirmModal 
         isOpen={showLogoutModal}
         onClose={() => setShowLogoutModal(false)}
@@ -52,7 +54,7 @@ export default function DashboardSidebar({ activeTab, setActiveTab }: any) {
         title="লগআউট করতে চান?"
         description="আপনি কি নিশ্চিত যে আপনি আপনার প্রোফাইল থেকে বের হয়ে যেতে চান?"
         confirmText="হ্যাঁ, বিদায়"
-        Icon={LogOut} // এখানে তুমি যেকোনো আইকন পাস করতে পারো
+        Icon={LogOut} 
         variant="danger"
       />
     </>
