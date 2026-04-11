@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { LayoutDashboard, PlusSquare, Settings, LogOut, AlertCircle } from "lucide-react";
+import { LayoutDashboard, PlusSquare, Settings, LogOut } from "lucide-react";
 import { signOut } from "next-auth/react";
 import ConfirmModal from "../ConfirmModal"; 
 
@@ -8,7 +8,7 @@ export default function DashboardSidebar({ activeTab, setActiveTab }: any) {
   const [showLogoutModal, setShowLogoutModal] = useState(false);
 
   const menuItems = [
-    { id: "listings", label: "আমার মসজিদসমূহ", icon: LayoutDashboard },
+    { id: "listings", label: "আমার যোগ করা ইদ্গাহগুলা", icon: LayoutDashboard },
     { id: "add", label: "নতুন মসজিদ যোগ", icon: PlusSquare },
     { id: "profile", label: "প্রোফাইল সেটিংস", icon: Settings }
   ];
