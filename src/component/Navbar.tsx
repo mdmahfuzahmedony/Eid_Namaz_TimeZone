@@ -64,7 +64,7 @@ export default function Navbar({ onAddClick }: NavbarProps) {
 
     const interval = setInterval(() => checkAndCleanupImages(), 5000);
     return () => clearInterval(interval);
-  }, []); // dependencies empty রাখাই ভালো যদি শুধু মাউন্ট চেক করতে চাও
+  }, []);
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -83,10 +83,8 @@ export default function Navbar({ onAddClick }: NavbarProps) {
     }
   };
 
-  // ১. এই ফাংশনটি মোডালের 'ঠিক আছে' বাটনে কাজ করবে
   const handleConfirmPhotoAdd = () => {
-    setShowWarningModal(false); // মোডাল বন্ধ করো
-    // একটি ছোট ডিলে (Delay) দাও যাতে ব্রাউজার ইনপুটটি ক্লিক করতে পারে
+    setShowWarningModal(false);
     setTimeout(() => {
         fileInputRef.current?.click();
     }, 100);
@@ -107,6 +105,7 @@ export default function Navbar({ onAddClick }: NavbarProps) {
           </div>
 
           <div className="flex items-center gap-3">
+            {/* থিম মেনু বাটন এবং ড্রপডাউন */}
             <div className="relative">
               <button 
                 onClick={() => {setShowThemeMenu(!showThemeMenu); setShowDropdown(false);}}
@@ -119,8 +118,9 @@ export default function Navbar({ onAddClick }: NavbarProps) {
                 )}
               </button>
 
+              {/* ══════════════ ড্রপডাউন পজিশন ফিক্সড করা হয়েছে ══════════════ */}
               {showThemeMenu && (
-                <div className="absolute right-0 mt-3 w-72 bg-slate-900/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/10 p-4 z-[70]">
+                <div className="absolute right-[-20px] sm:right-0 mt-3 w-[280px] sm:w-72 bg-slate-900/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/10 p-4 z-[70] animate-in fade-in slide-in-from-top-2 duration-200">
                   <div className="flex items-center justify-between mb-3 border-b border-white/5 pb-2 text-white font-black">
                     <p className="text-[10px] uppercase opacity-70 tracking-widest">থিম মেনু</p>
                     <Clock size={10} className="text-yellow-500" />
@@ -128,14 +128,14 @@ export default function Navbar({ onAddClick }: NavbarProps) {
                   
                   <div className="grid grid-cols-5 gap-2 mb-4">
                     {defaultImages.map((img, index) => (
-                      <img key={index} src={img} onClick={() => applyBg(img)} className={`w-full h-10 object-cover rounded-lg cursor-pointer border-2 ${currentBg === img ? 'border-yellow-500' : 'border-white/10'}`} />
+                      <img key={index} src={img} onClick={() => applyBg(img)} className={`w-full h-10 object-cover rounded-lg cursor-pointer border-2 transition-all ${currentBg === img ? 'border-yellow-500 scale-105 shadow-lg shadow-yellow-500/20' : 'border-white/10'}`} />
                     ))}
                   </div>
 
                   {customImages.length > 0 && (
                     <div className="grid grid-cols-5 gap-2 mb-4">
                       {customImages.map((img, index) => (
-                        <img key={index} src={img.url} onClick={() => applyBg(img.url)} className={`w-full h-10 object-cover rounded-lg cursor-pointer border-2 ${currentBg === img.url ? 'border-yellow-500' : 'border-white/10'}`} />
+                        <img key={index} src={img.url} onClick={() => applyBg(img.url)} className={`w-full h-10 object-cover rounded-lg cursor-pointer border-2 transition-all ${currentBg === img.url ? 'border-yellow-500 scale-105' : 'border-white/10'}`} />
                       ))}
                     </div>
                   )}
@@ -156,18 +156,18 @@ export default function Navbar({ onAddClick }: NavbarProps) {
                   <img src={session.user?.image || "/profile.png"} className="w-full h-full object-cover" />
                 </button>
                 {showDropdown && (
-                  <div className="absolute right-0 mt-3 w-48 bg-slate-900 rounded-2xl shadow-2xl border border-white/5 overflow-hidden z-[60]">
+                  <div className="absolute right-0 mt-3 w-48 bg-slate-900 rounded-2xl shadow-2xl border border-white/5 overflow-hidden z-[60] animate-in fade-in slide-in-from-top-2 duration-200">
                     <Link href="/profile" className="flex items-center gap-3 px-4 py-3 text-sm text-slate-200 hover:bg-white/5 transition-colors">
                       <UserCircle size={18} className="text-yellow-500" /> প্রোফাইল
                     </Link>
-                    <button onClick={() => signOut()} className="w-full flex items-center gap-3 px-4 py-3 text-sm text-red-500 border-t border-white/5 text-left font-bold">
+                    <button onClick={() => signOut()} className="w-full flex items-center gap-3 px-4 py-3 text-sm text-red-500 border-t border-white/5 text-left font-bold hover:bg-red-500/5">
                       <LogOut size={18} /> লগআউট
                     </button>
                   </div>
                 )}
               </div>
             ) : (
-              <button onClick={handleAddClick} className="bg-yellow-500 text-black px-4 py-2 rounded-xl font-black text-xs transition-all shadow-lg">
+              <button onClick={handleAddClick} className="bg-yellow-500 text-black px-4 py-2 rounded-xl font-black text-xs transition-all shadow-lg active:scale-95">
                 <Plus size={16} className="mr-1 inline-block" /> মসজিদ যোগ
               </button>
             )}
@@ -175,7 +175,6 @@ export default function Navbar({ onAddClick }: NavbarProps) {
         </div>
       </nav>
 
-      {/* ২. রিইউজেবল ওয়ার্নিং মোডাল (এখানে handleConfirmPhotoAdd কল করা হয়েছে) */}
       <ConfirmModal 
         isOpen={showWarningModal}
         onClose={() => setShowWarningModal(false)}
@@ -188,7 +187,6 @@ export default function Navbar({ onAddClick }: NavbarProps) {
         variant="warning"
       />
 
-      {/* ৩. ফাইল ইনপুটটি অবশ্যই এখানে থাকবে */}
       <input 
         type="file" 
         ref={fileInputRef} 
