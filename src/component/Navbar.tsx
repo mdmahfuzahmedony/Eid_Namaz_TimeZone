@@ -119,35 +119,58 @@ export default function Navbar({ onAddClick }: NavbarProps) {
               </button>
 
               {/* ══════════════ ড্রপডাউন পজিশন ফিক্সড করা হয়েছে ══════════════ */}
-              {showThemeMenu && (
-                <div className="absolute right-[-20px] sm:right-0 mt-3 w-[280px] sm:w-72 bg-slate-900/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/10 p-4 z-[70] animate-in fade-in slide-in-from-top-2 duration-200">
-                  <div className="flex items-center justify-between mb-3 border-b border-white/5 pb-2 text-white font-black">
-                    <p className="text-[10px] uppercase opacity-70 tracking-widest">থিম মেনু</p>
-                    <Clock size={10} className="text-yellow-500" />
-                  </div>
-                  
-                  <div className="grid grid-cols-5 gap-2 mb-4">
-                    {defaultImages.map((img, index) => (
-                      <img key={index} src={img} onClick={() => applyBg(img)} className={`w-full h-10 object-cover rounded-lg cursor-pointer border-2 transition-all ${currentBg === img ? 'border-yellow-500 scale-105 shadow-lg shadow-yellow-500/20' : 'border-white/10'}`} />
-                    ))}
-                  </div>
+             // Navbar.tsx এর থিম মেনু ড্রপডাউন অংশটি এখান থেকে আপডেট করুন:
 
-                  {customImages.length > 0 && (
-                    <div className="grid grid-cols-5 gap-2 mb-4">
-                      {customImages.map((img, index) => (
-                        <img key={index} src={img.url} onClick={() => applyBg(img.url)} className={`w-full h-10 object-cover rounded-lg cursor-pointer border-2 transition-all ${currentBg === img.url ? 'border-yellow-500 scale-105' : 'border-white/10'}`} />
-                      ))}
-                    </div>
-                  )}
+{showThemeMenu && (
+  <div 
+    className="absolute right-0 mt-3 w-72 sm:w-80 bg-slate-900/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/10 p-4 z-[70] animate-in fade-in slide-in-from-top-2 duration-200 
+    /* ════════ মোবাইল ফিক্স ════════ */
+    max-w-[calc(100vw-32px)] origin-top-right"
+  >
+    {/* মেনু কন্টেন্ট */}
+    <div className="flex items-center justify-between mb-3 border-b border-white/5 pb-2 text-white font-black">
+      <p className="text-[10px] uppercase opacity-70 tracking-widest">থিম মেনু</p>
+      <Clock size={10} className="text-yellow-500" />
+    </div>
+    
+    {/* ইমেজের গ্রিড */}
+    <div className="grid grid-cols-5 gap-2 mb-4">
+      {defaultImages.map((img, index) => (
+        <img 
+          key={index} 
+          src={img} 
+          onClick={() => applyBg(img)} 
+          className={`w-full h-10 object-cover rounded-lg cursor-pointer border-2 transition-all ${
+            currentBg === img ? 'border-yellow-500 scale-105 shadow-lg shadow-yellow-500/20' : 'border-white/10'
+          }`} 
+        />
+      ))}
+    </div>
 
-                  <button 
-                    onClick={() => {setShowWarningModal(true); setShowThemeMenu(false);}}
-                    className="w-full flex items-center justify-center gap-2 py-2.5 bg-yellow-500 hover:bg-yellow-400 text-black rounded-xl text-xs font-black transition-all shadow-lg active:scale-95"
-                  >
-                    <Plus size={14} /> ফটো যোগ করুন
-                  </button>
-                </div>
-              )}
+    {customImages.length > 0 && (
+      <div className="grid grid-cols-5 gap-2 mb-4">
+        {customImages.map((img, index) => (
+          <img 
+            key={index} 
+            src={img.url} 
+            onClick={() => applyBg(img.url)} 
+            className={`w-full h-10 object-cover rounded-lg cursor-pointer border-2 transition-all ${
+              currentBg === img.url ? 'border-yellow-500 scale-105' : 'border-white/10'
+            }`} 
+          />
+        ))}
+      </div>
+    )}
+
+    {/* বাটন */}
+    <button 
+      onClick={() => {setShowWarningModal(true); setShowThemeMenu(false);}}
+      className="w-full flex items-center justify-center gap-2 py-3 bg-yellow-500 hover:bg-yellow-400 text-black rounded-xl text-xs font-black transition-all shadow-lg active:scale-95"
+    >
+      <Plus size={14} /> ফটো যোগ করুন
+    </button>
+  </div>
+)} 
             </div>
 
             {session ? (
