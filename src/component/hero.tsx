@@ -50,11 +50,11 @@ export default function Hero({ compact = false, onSearch }: HeroProps) {
             </div>
 
             <h1 className="text-white font-black leading-[1.2] mb-6 hero-text-shadow text-[1.8rem] sm:text-[2.8rem] md:text-[3.2rem]">
-              আপনার গ্রামের ঈদের <br /> <span className="text-yellow-400 italic">নামাজের সময়</span> খুঁজুন
+              আপনার এলাকার ঈদের <br /> <span className="text-yellow-400 italic">নামাজের সময়</span> খুঁজুন
             </h1>
 
             <p className="text-slate-100 text-xs sm:text-sm mb-10 max-w-md leading-relaxed hero-text-shadow font-medium">
-              জেলা থেকে গ্রাম পর্যন্ত — সারা বাংলাদেশের সব মসজিদের ঈদের জামাতের সময় এখন এক ক্লিকেই।
+              জেলা থেকে গ্রাম পর্যন্ত — সারা বাংলাদেশের সব এলাকার ঈদের নামাজের সময় এখন এক জায়গাই।
             </p>
 
             {/* SEARCH BAR CONNECTION */}
