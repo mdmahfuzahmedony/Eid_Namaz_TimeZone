@@ -65,9 +65,6 @@ export default function AddMasjid({ language = "bn", editData, onSuccess }: Prop
     const userId = (session?.user as any)?.id;
     if (!userId) { toast.error("দয়া করে আবার লগইন করুন!"); return; }
 
-    // ═══════════ কঠোর ভ্যালিডেশন (Draft & Publish উভয়ের জন্য) ═══════════
-    
-    // ১. নাম, ঠিকানা, ম্যাপ লিংক এবং ইমেজ বাধ্যতামূলক
     const isImageMissing = !selectedFile && !editData?.imageUrl;
     
     if (!name || !divisionId || !districtId || !upazilaId || !unionId || !mapLink || isImageMissing) {
@@ -75,7 +72,6 @@ export default function AddMasjid({ language = "bn", editData, onSuccess }: Prop
       return;
     }
 
-    // ২. পাবলিশ করতে হলে ইমামের নাম এবং সময় বাধ্যতামূলক
     if (publishStatus && (!imamName || !jamaat1)) {
       toast.warning("সরাসরি পাবলিশ করতে ইমামের নাম এবং নামাজের সময় দিন");
       return;
@@ -120,24 +116,23 @@ export default function AddMasjid({ language = "bn", editData, onSuccess }: Prop
     }
   };
 
-  const inputClass = "mt-1.5 w-full border border-slate-800 rounded-2xl px-5 py-4 text-sm outline-none focus:border-yellow-500 bg-[#0f172a] text-white transition-all";
-  const selectClass = "mt-1.5 w-full border border-slate-800 rounded-2xl px-5 py-4 text-sm outline-none focus:ring-4 focus:ring-yellow-500/10 focus:border-yellow-500 bg-[#0f172a] text-white disabled:opacity-30 appearance-none transition-all cursor-pointer";
-  const labelClass = "text-[10px] font-black text-slate-500 uppercase tracking-widest flex items-center gap-2 ml-2";
+  // --- কাস্টম স্টাইল ক্লাস (ফন্ট সাইজ ও প্যাডিং কমানো হয়েছে) ---
+  const inputClass = "mt-1 w-full border border-white/5 rounded-xl px-4 py-3 text-[13px] outline-none focus:border-yellow-500/50 bg-slate-800/40 text-white transition-all placeholder:text-slate-600 font-medium";
+  const selectClass = "mt-1 w-full border border-white/5 rounded-xl px-4 py-3 text-[13px] outline-none focus:border-yellow-500/50 bg-slate-800/40 text-white disabled:opacity-30 appearance-none transition-all cursor-pointer font-medium";
+  const labelClass = "text-[11px] font-bold text-slate-500 uppercase tracking-widest flex items-center gap-2 ml-1";
 
   return (
-    <div className="bg-transparent px-2 py-4">
-   
-      
-      <div className="max-w-2xl mx-auto space-y-6">
+    <div className="bg-transparent px-2 py-2">
+      <div className="max-w-xl mx-auto space-y-5">
         
         {/* নাম ও ধরন */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="flex flex-col">
-            <label className={labelClass}><Building2 size={12} /> ঈদগাহ/মসজিদ/মাঠের নাম দিন *</label>
-            <input value={name} onChange={e => setName(e.target.value)} placeholder="এই খানে লিখুন" className={inputClass} />
+            <label className={labelClass}><Building2 size={13} /> নাম লিখুন *</label>
+            <input value={name} onChange={e => setName(e.target.value)} placeholder="ঈদগাহ বা মসজিদের নাম" className={inputClass} />
           </div>
           <div className="flex flex-col">
-            <label className={labelClass}><Hash size={12} /> ধরন নির্বাচন করুন *</label>
+            <label className={labelClass}><Hash size={13} /> ধরন নির্বাচন করুন *</label>
             <select value={type} onChange={e => setType(e.target.value)} className={selectClass}>
               {["মসজিদ", "ঈদগাহ", "মাঠ"].map(opt => <option key={opt} value={opt} className="bg-slate-900">{opt}</option>)}
             </select>
@@ -145,105 +140,105 @@ export default function AddMasjid({ language = "bn", editData, onSuccess }: Prop
         </div>
 
         {/* ঠিকানা সেকশন */}
-        <div className="bg-slate-900/50 p-6 rounded-[2.5rem] border border-slate-800 space-y-5 shadow-2xl">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+        <div className="bg-slate-900/40 p-5 rounded-[2rem] border border-white/5 space-y-4 shadow-xl">
+          <div className="grid grid-cols-2 gap-4">
             <div>
-             
+              <label className={labelClass}>বিভাগ *</label>
               <select value={divisionId} onChange={e => setDivisionId(e.target.value)} className={selectClass}>
-                <option value="" className="bg-slate-900">সিলেক্ট বিভাগ</option>
+                <option value="" className="bg-slate-900">সিলেক্ট করুন</option>
                 {divisionsData.map((d: any) => <option key={d.id} value={d.id} className="bg-slate-900">{nameOf(d)}</option>)}
               </select>
             </div>
             <div>
-             
+              <label className={labelClass}>জেলা *</label>
               <select value={districtId} onChange={e => setDistrictId(e.target.value)} disabled={!divisionId} className={selectClass}>
-                <option value="" className="bg-slate-900">সিলেক্ট জেলা</option>
+                <option value="" className="bg-slate-900">সিলেক্ট করুন</option>
                 {districts.map((d: any) => <option key={d.id} value={d.id} className="bg-slate-900">{nameOf(d)}</option>)}
               </select>
             </div>
             <div>
-            
+              <label className={labelClass}>উপজেলা *</label>
               <select value={upazilaId} onChange={e => setUpazilaId(e.target.value)} disabled={!districtId} className={selectClass}>
-                <option value="" className="bg-slate-900">সিলেক্ট উপজেলা</option>
+                <option value="" className="bg-slate-900">সিলেক্ট করুন</option>
                 {upazilas.map((u: any) => <option key={u.id} value={u.id} className="bg-slate-900">{nameOf(u)}</option>)}
               </select>
             </div>
             <div>
-            
+              <label className={labelClass}>ইউনিয়ন *</label>
               <select value={unionId} onChange={e => setUnionId(e.target.value)} disabled={!upazilaId} className={selectClass}>
-                <option value="" className="bg-slate-900">সিলেক্ট ইউনিয়ন</option>
+                <option value="" className="bg-slate-900">সিলেক্ট করুন</option>
                 {unions.map((u: any) => <option key={u.id} value={u.id} className="bg-slate-900">{nameOf(u)}</option>)}
               </select>
             </div>
           </div>
           <div className="flex flex-col">
-             <label className={labelClass}><MapPin size={12}/> গ্রাম / মহল্লা</label>
-             <input value={gram} onChange={e => setGram(e.target.value)} placeholder="গ্রামের নাম লিখুন" className={inputClass} />
+             <label className={labelClass}><MapPin size={13}/> গ্রাম / মহল্লা</label>
+             <input value={gram} onChange={e => setGram(e.target.value)} placeholder="গ্রামের নাম লিখুন..." className={inputClass} />
           </div>
         </div>
 
-        {/* ম্যাপ ও ইমেজ (এখন ড্রাফট এর জন্যও বাধ্যতামূলক) */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+        {/* ম্যাপ ও ইমেজ */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
            <div className="flex flex-col">
-              <label className={labelClass}><MapIcon size={12}/> গুগল ম্যাপ লিংক *</label>
+              <label className={labelClass}><MapIcon size={13}/> গুগল ম্যাপ লিংক *</label>
               <input value={mapLink} onChange={e => setMapLink(e.target.value)} placeholder="লিংক পেস্ট করুন" className={inputClass} />
            </div>
            <div className="flex flex-col">
-              <label className={labelClass}><Upload size={12}/> ছবি আপলোড করুন *</label>
-              <label className={`${inputClass} flex items-center gap-3 cursor-pointer overflow-hidden border-dashed`}>
-                <Upload size={18} className="text-yellow-500 shrink-0" />
-                <span className="truncate text-slate-400">{selectedFile ? selectedFile.name : (editData?.imageUrl ? "ছবি দেওয়া আছে" : "একটি ছবি সিলেক্ট করুন")}</span>
+              <label className={labelClass}><Upload size={13}/> ছবি আপলোড *</label>
+              <label className={`${inputClass} flex items-center gap-3 cursor-pointer overflow-hidden border-dashed border-white/10`}>
+                <Upload size={16} className="text-yellow-500 shrink-0" />
+                <span className="truncate text-slate-500 text-[12px]">{selectedFile ? selectedFile.name : (editData?.imageUrl ? "ছবি দেওয়া আছে" : "ছবি সিলেক্ট করুন")}</span>
                 <input type="file" accept="image/*" className="hidden" onChange={(e) => setSelectedFile(e.target.files?.[0] || null)} />
               </label>
            </div>
         </div>
 
         {/* ইমাম ও সময় */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 pt-2">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
            <div className="flex flex-col">
-              <label className={labelClass}><User size={12} /> ইমামের নাম</label>
-              <input value={imamName} onChange={e => setImamName(e.target.value)} placeholder="ইমামের নাম" className={inputClass} />
+              <label className={labelClass}><User size={13} /> ইমামের নাম</label>
+              <input value={imamName} onChange={e => setImamName(e.target.value)} placeholder="ইমামের নাম লিখুন" className={inputClass} />
            </div>
            <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className={labelClass}><Clock size={12} /> ১ম জামাত</label>
+                <label className={labelClass}><Clock size={13} /> ১ম জামাত</label>
                 <input type="time" value={jamaat1} onChange={e => setJamaat1(e.target.value)} className={inputClass} />
               </div>
               <div>
-                <label className={labelClass}><Clock size={12} /> ২য় জামাত</label>
+                <label className={labelClass}><Clock size={13} /> ২য় জামাত</label>
                 <input type="time" value={jamaat2} onChange={e => setJamaat2(e.target.value)} className={inputClass} />
               </div>
            </div>
         </div>
 
-        {/* বাটনসমূহ */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-8">
-           <button onClick={() => handleSubmit(false)} disabled={loading} className="w-full bg-slate-800 text-slate-400 py-5 rounded-[2rem] font-bold hover:bg-slate-700 transition-all active:scale-95 disabled:opacity-50">
-             {loading ? <Loader2 className="animate-spin mx-auto" /> : "খসড়া হিসেবে রাখুন"}
+        {/* বাটনসমূহ - সাইজ কমানো হয়েছে */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-4">
+           <button onClick={() => handleSubmit(false)} disabled={loading} className="w-full bg-slate-800/60 text-slate-400 py-3.5 rounded-xl text-sm font-bold hover:bg-slate-800 transition-all active:scale-95 disabled:opacity-50">
+             {loading ? <Loader2 className="animate-spin mx-auto" size={20} /> : "খসড়া হিসেবে রাখুন"}
            </button>
-           <button onClick={() => handleSubmit(true)} disabled={loading} className="w-full bg-yellow-500 text-black py-5 rounded-[2rem] font-black shadow-xl shadow-yellow-500/10 hover:bg-yellow-400 transition-all active:scale-95 disabled:opacity-50 flex items-center justify-center gap-2">
-             {loading ? <Loader2 className="animate-spin" /> : <Send size={18} />}
+           <button onClick={() => handleSubmit(true)} disabled={loading} className="w-full bg-yellow-500 text-black py-3.5 rounded-xl text-sm font-black shadow-lg shadow-yellow-500/5 hover:bg-yellow-400 transition-all active:scale-95 disabled:opacity-50 flex items-center justify-center gap-2">
+             {loading ? <Loader2 className="animate-spin" size={20} /> : <Send size={16} />}
              পাবলিশ করুন
            </button>
         </div>
       </div>
 
-      {/* ডুপ্লিকেট মডাল আগের মতোই থাকবে */}
+      {/* ডুপ্লিকেট মডাল */}
       {duplicateOwner && (
-        <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/90 backdrop-blur-md animate-in fade-in">
-          <div className="bg-slate-900 border border-slate-800 p-10 rounded-[3rem] max-w-sm w-full text-center shadow-2xl animate-in zoom-in-95">
-            <div className="w-24 h-24 bg-yellow-500/10 rounded-full flex items-center justify-center mx-auto mb-6">
-               <Building2 className="text-yellow-500" size={44} />
+        <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in">
+          <div className="bg-slate-900 border border-white/5 p-8 rounded-[2.5rem] max-w-sm w-full text-center shadow-2xl animate-in zoom-in-95">
+            <div className="w-20 h-20 bg-yellow-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
+               <Building2 className="text-yellow-500" size={36} />
             </div>
-            <h2 className="text-2xl font-black text-white mb-2">ইতিমধ্যে আছে!</h2>
-            <div className="bg-white/5 p-4 rounded-[2rem] flex items-center gap-4 mb-8 border border-white/5 shadow-inner mt-4">
-              <img src={duplicateOwner.image || "/profile.png"} className="w-14 h-14 rounded-2xl object-cover border-2 border-yellow-500 shadow-lg" alt="User" />
+            <h2 className="text-xl font-black text-white mb-1">ইতিমধ্যে আছে!</h2>
+            <div className="bg-white/5 p-3 rounded-2xl flex items-center gap-3 mb-6 border border-white/5 mt-4">
+              <img src={duplicateOwner.image || "/profile.png"} className="w-12 h-12 rounded-xl object-cover border-2 border-yellow-500" alt="User" />
               <div className="text-left">
-                <p className="text-[10px] text-yellow-500 font-black uppercase tracking-widest">যোগ করেছেন</p>
-                <p className="font-bold text-white text-base">{duplicateOwner.name}</p>
+                <p className="text-[9px] text-yellow-500 font-black uppercase tracking-widest">যোগ করেছেন</p>
+                <p className="font-bold text-white text-sm">{duplicateOwner.name}</p>
               </div>
             </div>
-            <button onClick={() => setDuplicateOwner(null)} className="w-full bg-yellow-500 text-black py-5 rounded-2xl font-black shadow-lg hover:bg-yellow-400 transition-all active:scale-95">
+            <button onClick={() => setDuplicateOwner(null)} className="w-full bg-yellow-500 text-black py-3.5 rounded-xl font-bold shadow-lg hover:bg-yellow-400 transition-all">
               ঠিক আছে
             </button>
           </div>
