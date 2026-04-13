@@ -50,7 +50,7 @@ export default function Hero({ compact = false, onSearch }: HeroProps) {
             </div>
 
             <h1 className="text-white font-black leading-[1.2] mb-6 hero-text-shadow text-[1.8rem] sm:text-[2.8rem] md:text-[3.2rem]">
-              আপনার এলাকার ঈদের <br /> <span className="text-yellow-400 italic">নামাজের সময়</span> খুঁজুন
+              আপনার এলাকার <br /> <span className="text-yellow-400 italic"> ঈদের নামাজের সময়</span> খুঁজুন
             </h1>
 
             <p className="text-slate-100 text-xs sm:text-sm mb-10 max-w-md leading-relaxed hero-text-shadow font-medium">
