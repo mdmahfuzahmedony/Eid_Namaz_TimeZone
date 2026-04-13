@@ -6,7 +6,7 @@ export default function Footer({ language }) {
 
   const content = {
     description: language === "bn" 
-      ? "সারা বাংলাদেশের ঈদগাহ ও মসজিদের সময়সূচি" 
+      ? "সারা বাংলাদেশের ঈদের নামাজের সময়সূচি" 
       : "Prayer times for Eidgahs and Mosques across Bangladesh",
     copyright: language === "bn" 
       ? "© ২০২৬ — সবার জন্য বিনামূল্যে" 
