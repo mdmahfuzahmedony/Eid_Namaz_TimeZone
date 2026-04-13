@@ -1,27 +1,32 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
-// api/masjids/search/route.ts
-
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
 
-  // query parameter থেকে মানগুলো নিন
   const divisionId = searchParams.get("divisionId");
   const districtId = searchParams.get("districtId");
   const upazilaId = searchParams.get("upazilaId");
-  const unionId = searchParams.get("unionId");
+  const union = searchParams.get("union"); // ইউনিয়ন আইডি অথবা পৌরসভার নাম
   const gram = searchParams.get("gram");
+  const isCityMode = searchParams.get("isCityMode") === "true"; // স্ট্রিং থেকে বুলিয়ান
 
   try {
-    console.log("Searching with:", { divisionId, districtId, upazilaId, unionId, gram });
     const masjids = await prisma.masjid.findMany({
       where: {
-        // approved: true, // যদি চেক করতে চান তবে এটি আপাতত কমেন্ট করে দেখতে পারেন
-        ...(divisionId && { divisionId: divisionId }),
-        ...(districtId && { districtId: districtId }),
-        ...(upazilaId && { upazilaId: upazilaId }),
-        ...(unionId && { unionId: unionId }),
+        isPublished: true,
+        ...(divisionId && { divisionId }),
+        ...(districtId && { districtId }),
+        ...(upazilaId && { upazilaId }),
+        
+        // ════════════════════════════════════════════════════════════
+        // শহর না গ্রাম তার ওপর ভিত্তি করে সার্চ লজিক
+        // ════════════════════════════════════════════════════════════
+        ...(union && (isCityMode ? 
+          { unionName: { contains: union.trim(), mode: "insensitive" } } : 
+          { unionId: union }
+        )),
+
         ...(gram && {
           gram: { contains: gram.trim(), mode: "insensitive" },
         }),

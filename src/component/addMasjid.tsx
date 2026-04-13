@@ -6,7 +6,7 @@ import { createMasjid, updateMasjid } from "@/app/actions/masjidActions";
 import { uploadImage } from "@/app/actions/uploadAction";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { User, Clock, Building2, Loader2, Hash, Save, Send, Upload, X, MapPin, Map as MapIcon } from "lucide-react";
+import { User, Clock, Building2, Loader2, Hash, Save, Send, Upload, X, MapPin, Map as MapIcon, Home, Building } from "lucide-react";
 import { useSession } from "next-auth/react";
 
 import divisionsData from "@/app/data/divisions.json";
@@ -30,7 +30,12 @@ export default function AddMasjid({ language = "bn", editData, onSuccess }: Prop
   const [divisionId, setDivisionId] = useState(editData?.divisionId || "");
   const [districtId, setDistrictId] = useState(editData?.districtId || "");
   const [upazilaId,  setUpazilaId]  = useState(editData?.upazilaId || "");
+  
+  // নতুন স্টেট: শহর না গ্রাম মোড
+  const [isCityMode, setIsCityMode] = useState(editData?.isCityMode || false);
   const [unionId,    setUnionId]    = useState(editData?.unionId || "");
+  const [paurashava, setPaurashava] = useState(editData?.paurashava || ""); // পৌরসভার নাম
+
   const [gram,       setGram]       = useState(editData?.gram || "");
   const [name,       setName]       = useState(editData?.name || "");
   const [type,       setType]       = useState(editData?.type || "মসজিদ");
@@ -58,32 +63,26 @@ export default function AddMasjid({ language = "bn", editData, onSuccess }: Prop
     setUnions(unionsData.filter((u: any) => u.upazilla_id === upazilaId));
   }, [upazilaId]);
 
-  const bn = language === "bn";
   const nameOf = (item: any) => (language === "en" && item.name) ? item.name : item.bn_name;
 
-  // ════════════════════════════════════════════════════════════
-  // ডাটা ক্লিন এবং সেভ করার লজিক
-  // ════════════════════════════════════════════════════════════
   const handleSubmit = async (publishStatus: boolean) => {
     const userId = (session?.user as any)?.id;
     if (!userId) { toast.error("দয়া করে আবার লগইন করুন!"); return; }
 
-    // স্পেস ক্লিন করার ফাংশন (মাঝখানের ও দুই পাশের বাড়তি স্পেস সরাবে)
-    const cleanInput = (str: string) => str.trim().replace(/\s+/g, ' ');
+    // স্পেস ক্লিন করার লজিক
+    const clean = (str: string) => str.trim().replace(/\s+/g, ' ');
 
-    const cleanedName = cleanInput(name);
-    const cleanedGram = cleanInput(gram);
-    const cleanedImam = cleanInput(imamName);
+    const cleanedName = clean(name);
+    const cleanedGram = clean(gram);
+    const cleanedImam = clean(imamName);
+    const cleanedPaurashava = clean(paurashava);
 
     const isImageMissing = !selectedFile && !editData?.imageUrl;
     
-    if (!cleanedName || !divisionId || !districtId || !upazilaId || !unionId || !mapLink || isImageMissing) {
+    // ভ্যালিডেশন চেক
+    const unionPart = isCityMode ? cleanedPaurashava : unionId;
+    if (!cleanedName || !divisionId || !districtId || !upazilaId || !unionPart || !mapLink || isImageMissing) {
       toast.warning("নাম, পূর্ণ ঠিকানা, ম্যাপ লিংক এবং ছবি অবশ্যই দিতে হবে");
-      return;
-    }
-
-    if (publishStatus && (!cleanedImam || !jamaat1)) {
-      toast.warning("সরাসরি পাবলিশ করতে ইমামের নাম এবং নামাজের সময় দিন");
       return;
     }
 
@@ -97,19 +96,21 @@ export default function AddMasjid({ language = "bn", editData, onSuccess }: Prop
       }
 
       const masjidData = {
-        name: cleanedName, // ক্লিন করা নাম
-        type, 
-        imamName: cleanedImam, // ক্লিন করা ইমামের নাম
-        mapLink: mapLink.trim(), 
+        name: cleanedName,
+        type,
+        imamName: cleanedImam,
+        mapLink: mapLink.trim(),
         imageUrl: finalImageUrl,
-        jamaat1, 
+        jamaat1,
         jamaat2,
-        divisionId, districtId, upazilaId, unionId, 
-        gram: cleanedGram, // ক্লিন করা গ্রামের নাম
+        divisionId, districtId, upazilaId,
+        isCityMode, // শহর না গ্রাম মোড ডাটাবেজে যাবে
+        unionId: isCityMode ? "" : unionId, // গ্রাম হলে আইডি, শহর হলে খালি
+        unionName: isCityMode ? cleanedPaurashava : unionsData.find((u: any) => u.id === unionId)?.bn_name || "",
+        gram: cleanedGram,
         divisionName: divisionsData.find((d: any) => d.id === divisionId)?.bn_name || "",
         districtName: districtsData.find((d: any) => d.id === districtId)?.bn_name || "",
         upazilaName:  upazilasData.find((u: any) => u.id === upazilaId)?.bn_name  || "",
-        unionName:    unionsData.find((u: any) => u.id === unionId)?.bn_name       || "",
         isPublished:  publishStatus,
         userId:       userId,
       };
@@ -155,6 +156,23 @@ export default function AddMasjid({ language = "bn", editData, onSuccess }: Prop
 
         {/* ঠিকানা সেকশন */}
         <div className="bg-slate-900/40 p-5 rounded-[2rem] border border-white/5 space-y-4 shadow-xl">
+          
+          {/* গ্রাম/শহর মোড সুইচ */}
+          <div className="flex justify-center gap-3 p-1 bg-slate-800/50 rounded-2xl w-fit mx-auto border border-white/5">
+            <button 
+              onClick={() => setIsCityMode(false)}
+              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-[11px] font-bold transition-all ${!isCityMode ? 'bg-yellow-500 text-black shadow-lg shadow-yellow-500/20' : 'text-slate-500'}`}
+            >
+              <Home size={12} /> গ্রাম / ইউনিয়ন
+            </button>
+            <button 
+              onClick={() => setIsCityMode(true)}
+              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-[11px] font-bold transition-all ${isCityMode ? 'bg-yellow-500 text-black shadow-lg shadow-yellow-500/20' : 'text-slate-500'}`}
+            >
+              <Building size={12} /> শহর / পৌরসভা
+            </button>
+          </div>
+
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className={labelClass}>বিভাগ *</label>
@@ -177,17 +195,34 @@ export default function AddMasjid({ language = "bn", editData, onSuccess }: Prop
                 {upazilas.map((u: any) => <option key={u.id} value={u.id} className="bg-slate-900">{nameOf(u)}</option>)}
               </select>
             </div>
+
+            {/* ডাইনামিক ফিল্ড: ইউনিয়ন অথবা পৌরসভা */}
             <div>
-              <label className={labelClass}>ইউনিয়ন *</label>
-              <select value={unionId} onChange={e => setUnionId(e.target.value)} disabled={!upazilaId} className={selectClass}>
-                <option value="" className="bg-slate-900">সিলেক্ট করুন</option>
-                {unions.map((u: any) => <option key={u.id} value={u.id} className="bg-slate-900">{nameOf(u)}</option>)}
-              </select>
+              {isCityMode ? (
+                <>
+                  <label className={labelClass}>পৌরসভা / এলাকা *</label>
+                  <input 
+                    value={paurashava} 
+                    onChange={e => setPaurashava(e.target.value)} 
+                    placeholder="পৌরসভার নাম লিখুন" 
+                    className={inputClass} 
+                  />
+                </>
+              ) : (
+                <>
+                  <label className={labelClass}>ইউনিয়ন *</label>
+                  <select value={unionId} onChange={e => setUnionId(e.target.value)} disabled={!upazilaId} className={selectClass}>
+                    <option value="" className="bg-slate-900">সিলেক্ট করুন</option>
+                    {unions.map((u: any) => <option key={u.id} value={u.id} className="bg-slate-900">{nameOf(u)}</option>)}
+                  </select>
+                </>
+              )}
             </div>
           </div>
+
           <div className="flex flex-col">
-             <label className={labelClass}><MapPin size={13}/> গ্রাম / মহল্লা</label>
-             <input value={gram} onChange={e => setGram(e.target.value)} placeholder="গ্রামের নাম লিখুন..." className={inputClass} />
+             <label className={labelClass}><MapPin size={13}/> {isCityMode ? "ওয়ার্ড / পাড়া / মহল্লা" : "গ্রাম / মহল্লা"}</label>
+             <input value={gram} onChange={e => setGram(e.target.value)} placeholder="বিস্তারিত নাম লিখুন..." className={inputClass} />
           </div>
         </div>
 
