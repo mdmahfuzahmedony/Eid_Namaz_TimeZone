@@ -105,11 +105,11 @@ export default function Navbar({ onAddClick }: NavbarProps) {
           </div>
 
           <div className="flex items-center gap-3">
-            {/* থিম মেনু বাটন এবং ড্রপডাউন */}
+            {/* থিম মেনু বাটন */}
             <div className="relative">
               <button 
                 onClick={() => {setShowThemeMenu(!showThemeMenu); setShowDropdown(false);}}
-                className="w-10 h-10 rounded-xl border-2 border-white/20 overflow-hidden bg-black/40 flex items-center justify-center group"
+                className="w-10 h-10 rounded-xl border-2 border-white/20 overflow-hidden bg-black/40 flex items-center justify-center transition-all active:scale-90"
               >
                 {currentBg ? (
                   <img src={currentBg} alt="Theme" className="w-full h-full object-cover opacity-80" />
@@ -118,79 +118,86 @@ export default function Navbar({ onAddClick }: NavbarProps) {
                 )}
               </button>
 
-              {/* ══════════════ ড্রপডাউন পজিশন ফিক্সড করা হয়েছে ══════════════ */}
+              {/* ══════════════ ড্রপডাউন মেনু (মোবাইল ও ডেস্কটপ ফিক্সড) ══════════════ */}
+              {showThemeMenu && (
+                <div 
+                  className="
+                    /* মোবাইলের জন্য: স্ক্রিনের মাঝখানে ফিক্সড */
+                    fixed inset-x-4 top-24 mx-auto w-auto max-w-[340px] 
+                    /* ডেস্কটপের জন্য: বাটনের নিচে ডান দিকে */
+                    sm:absolute sm:inset-auto sm:right-0 sm:top-full sm:mt-3 sm:w-72 
+                    
+                    bg-slate-900/95 backdrop-blur-2xl rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.5)] 
+                    border border-white/10 p-5 z-[100] animate-in fade-in zoom-in-95 duration-200
+                  "
+                >
+                  <div className="flex items-center justify-between mb-4 border-b border-white/5 pb-2 text-white">
+                    <div className="flex items-center gap-2">
+                      <Clock size={12} className="text-yellow-500" />
+                      <p className="text-[10px] uppercase font-black tracking-[2px] opacity-70">থিম গ্যালারি</p>
+                    </div>
+                    <button onClick={() => setShowThemeMenu(false)} className="sm:hidden p-1 hover:bg-white/10 rounded-full">
+                      <X size={16} />
+                    </button>
+                  </div>
+                  
+                  <div className="grid grid-cols-5 gap-2.5 mb-5">
+                    {defaultImages.map((img, index) => (
+                      <img 
+                        key={index} 
+                        src={img} 
+                        onClick={() => { applyBg(img); if(window.innerWidth < 640) setShowThemeMenu(false); }} 
+                        className={`w-full h-10 object-cover rounded-xl cursor-pointer border-2 transition-all active:scale-90 ${
+                          currentBg === img ? 'border-yellow-500 scale-110 shadow-lg shadow-yellow-500/30' : 'border-white/10'
+                        }`} 
+                      />
+                    ))}
+                  </div>
 
-{showThemeMenu && (
-  <div 
-    className="absolute right-0 mt-3 w-72 sm:w-80 bg-slate-900/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/10 p-4 z-[70] animate-in fade-in slide-in-from-top-2 duration-200 
-    /* ════════ মোবাইল ফিক্স ════════ */
-    max-w-[calc(100vw-32px)] origin-top-right"
-  >
-    {/* মেনু কন্টেন্ট */}
-    <div className="flex items-center justify-between mb-3 border-b border-white/5 pb-2 text-white font-black">
-      <p className="text-[10px] uppercase opacity-70 tracking-widest">থিম মেনু</p>
-      <Clock size={10} className="text-yellow-500" />
-    </div>
-    
-    {/* ইমেজের গ্রিড */}
-    <div className="grid grid-cols-5 gap-2 mb-4">
-      {defaultImages.map((img, index) => (
-        <img 
-          key={index} 
-          src={img} 
-          onClick={() => applyBg(img)} 
-          className={`w-full h-10 object-cover rounded-lg cursor-pointer border-2 transition-all ${
-            currentBg === img ? 'border-yellow-500 scale-105 shadow-lg shadow-yellow-500/20' : 'border-white/10'
-          }`} 
-        />
-      ))}
-    </div>
+                  {customImages.length > 0 && (
+                    <div className="grid grid-cols-5 gap-2.5 mb-5 border-t border-white/5 pt-4">
+                      {customImages.map((img, index) => (
+                        <img 
+                          key={index} 
+                          src={img.url} 
+                          onClick={() => { applyBg(img.url); if(window.innerWidth < 640) setShowThemeMenu(false); }} 
+                          className={`w-full h-10 object-cover rounded-xl cursor-pointer border-2 transition-all active:scale-90 ${
+                            currentBg === img.url ? 'border-yellow-500 scale-110' : 'border-white/10'
+                          }`} 
+                        />
+                      ))}
+                    </div>
+                  )}
 
-    {customImages.length > 0 && (
-      <div className="grid grid-cols-5 gap-2 mb-4">
-        {customImages.map((img, index) => (
-          <img 
-            key={index} 
-            src={img.url} 
-            onClick={() => applyBg(img.url)} 
-            className={`w-full h-10 object-cover rounded-lg cursor-pointer border-2 transition-all ${
-              currentBg === img.url ? 'border-yellow-500 scale-105' : 'border-white/10'
-            }`} 
-          />
-        ))}
-      </div>
-    )}
-
-    {/* বাটন */}
-    <button 
-      onClick={() => {setShowWarningModal(true); setShowThemeMenu(false);}}
-      className="w-full flex items-center justify-center gap-2 py-3 bg-yellow-500 hover:bg-yellow-400 text-black rounded-xl text-xs font-black transition-all shadow-lg active:scale-95"
-    >
-      <Plus size={14} /> ফটো যোগ করুন
-    </button>
-  </div>
-)} 
+                  <button 
+                    onClick={() => {setShowWarningModal(true); setShowThemeMenu(false);}}
+                    className="w-full flex items-center justify-center gap-3 py-3.5 bg-yellow-500 hover:bg-yellow-400 text-black rounded-2xl text-[13px] font-black transition-all shadow-xl active:scale-95"
+                  >
+                    <Plus size={16} strokeWidth={3} /> নতুন ফটো যোগ করুন
+                  </button>
+                </div>
+              )} 
             </div>
 
             {session ? (
               <div className="relative">
-                <button onClick={() => setShowDropdown(!showDropdown)} className="w-10 h-10 rounded-xl border-2 border-yellow-500 overflow-hidden bg-slate-800">
+                <button onClick={() => {setShowDropdown(!showDropdown); setShowThemeMenu(false);}} className="w-10 h-10 rounded-xl border-2 border-yellow-500 overflow-hidden bg-slate-800">
                   <img src={session.user?.image || "/profile.png"} className="w-full h-full object-cover" />
                 </button>
                 {showDropdown && (
                   <div className="absolute right-0 mt-3 w-48 bg-slate-900 rounded-2xl shadow-2xl border border-white/5 overflow-hidden z-[60] animate-in fade-in slide-in-from-top-2 duration-200">
-                    <Link href="/profile" className="flex items-center gap-3 px-4 py-3 text-sm text-slate-200 hover:bg-white/5 transition-colors">
+                    <Link href="/profile" onClick={() => setShowDropdown(false)} className="flex items-center gap-3 px-4 py-3 text-sm text-slate-200 hover:bg-white/5 transition-colors">
                       <UserCircle size={18} className="text-yellow-500" /> প্রোফাইল
                     </Link>
-                    <button onClick={() => signOut()} className="w-full flex items-center gap-3 px-4 py-3 text-sm text-red-500 border-t border-white/5 text-left font-bold hover:bg-red-500/5">
-                      <LogOut size={18} /> 
+                    <button onClick={() => signOut()} className="w-full flex items-center gap-3 px-4 py-3 text-sm text-red-500 border-t border-white/5 text-left font-bold hover:bg-red-500/5 transition-colors">
+                      <LogOut size={18} /> লগআউট
                     </button>
                   </div>
                 )}
               </div>
             ) : (
-              <button onClick={handleAddClick} className="bg-yellow-500 text-black px-4 py-2 rounded-xl font-black text-xs transition-all shadow-lg active:scale-95">
-                <Plus size={16} className="mr-1 inline-block" /> মসজিদ যোগ
+              <button onClick={handleAddClick} className="bg-yellow-500 text-black px-4 py-2 rounded-xl font-black text-xs transition-all shadow-lg active:scale-95 flex items-center gap-1">
+                <Plus size={16} /> মসজিদ যোগ
               </button>
             )}
           </div>
