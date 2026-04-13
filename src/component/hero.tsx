@@ -54,7 +54,7 @@ export default function Hero({ compact = false, onSearch }: HeroProps) {
             </h1>
 
             <p className="text-slate-100 text-xs sm:text-sm mb-10 max-w-md leading-relaxed hero-text-shadow font-medium">
-              জেলা থেকে গ্রাম পর্যন্ত — সারা বাংলাদেশের সব এলাকার ঈদের নামাজের সময় এখন এক জায়গাই।
+              জেলা থেকে গ্রাম পর্যন্ত — সারা বাংলাদেশের সব এলাকার ঈদের নামাজের সময় এখন এখানে।
             </p>
 
             {/* SEARCH BAR CONNECTION */}
