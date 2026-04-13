@@ -61,18 +61,28 @@ export default function AddMasjid({ language = "bn", editData, onSuccess }: Prop
   const bn = language === "bn";
   const nameOf = (item: any) => (language === "en" && item.name) ? item.name : item.bn_name;
 
+  // ════════════════════════════════════════════════════════════
+  // ডাটা ক্লিন এবং সেভ করার লজিক
+  // ════════════════════════════════════════════════════════════
   const handleSubmit = async (publishStatus: boolean) => {
     const userId = (session?.user as any)?.id;
     if (!userId) { toast.error("দয়া করে আবার লগইন করুন!"); return; }
 
+    // স্পেস ক্লিন করার ফাংশন (মাঝখানের ও দুই পাশের বাড়তি স্পেস সরাবে)
+    const cleanInput = (str: string) => str.trim().replace(/\s+/g, ' ');
+
+    const cleanedName = cleanInput(name);
+    const cleanedGram = cleanInput(gram);
+    const cleanedImam = cleanInput(imamName);
+
     const isImageMissing = !selectedFile && !editData?.imageUrl;
     
-    if (!name || !divisionId || !districtId || !upazilaId || !unionId || !mapLink || isImageMissing) {
+    if (!cleanedName || !divisionId || !districtId || !upazilaId || !unionId || !mapLink || isImageMissing) {
       toast.warning("নাম, পূর্ণ ঠিকানা, ম্যাপ লিংক এবং ছবি অবশ্যই দিতে হবে");
       return;
     }
 
-    if (publishStatus && (!imamName || !jamaat1)) {
+    if (publishStatus && (!cleanedImam || !jamaat1)) {
       toast.warning("সরাসরি পাবলিশ করতে ইমামের নাম এবং নামাজের সময় দিন");
       return;
     }
@@ -87,10 +97,15 @@ export default function AddMasjid({ language = "bn", editData, onSuccess }: Prop
       }
 
       const masjidData = {
-        name, type, imamName, mapLink, 
+        name: cleanedName, // ক্লিন করা নাম
+        type, 
+        imamName: cleanedImam, // ক্লিন করা ইমামের নাম
+        mapLink: mapLink.trim(), 
         imageUrl: finalImageUrl,
-        jamaat1, jamaat2,
-        divisionId, districtId, upazilaId, unionId, gram,
+        jamaat1, 
+        jamaat2,
+        divisionId, districtId, upazilaId, unionId, 
+        gram: cleanedGram, // ক্লিন করা গ্রামের নাম
         divisionName: divisionsData.find((d: any) => d.id === divisionId)?.bn_name || "",
         districtName: districtsData.find((d: any) => d.id === districtId)?.bn_name || "",
         upazilaName:  upazilasData.find((u: any) => u.id === upazilaId)?.bn_name  || "",
@@ -116,7 +131,6 @@ export default function AddMasjid({ language = "bn", editData, onSuccess }: Prop
     }
   };
 
-  // --- কাস্টম স্টাইল ক্লাস (ফন্ট সাইজ ও প্যাডিং কমানো হয়েছে) ---
   const inputClass = "mt-1 w-full border border-white/5 rounded-xl px-4 py-3 text-[13px] outline-none focus:border-yellow-500/50 bg-slate-800/40 text-white transition-all placeholder:text-slate-600 font-medium";
   const selectClass = "mt-1 w-full border border-white/5 rounded-xl px-4 py-3 text-[13px] outline-none focus:border-yellow-500/50 bg-slate-800/40 text-white disabled:opacity-30 appearance-none transition-all cursor-pointer font-medium";
   const labelClass = "text-[11px] font-bold text-slate-500 uppercase tracking-widest flex items-center gap-2 ml-1";
@@ -211,7 +225,7 @@ export default function AddMasjid({ language = "bn", editData, onSuccess }: Prop
            </div>
         </div>
 
-        {/* বাটনসমূহ - সাইজ কমানো হয়েছে */}
+        {/* বাটনসমূহ */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-4">
            <button onClick={() => handleSubmit(false)} disabled={loading} className="w-full bg-slate-800/60 text-slate-400 py-3.5 rounded-xl text-sm font-bold hover:bg-slate-800 transition-all active:scale-95 disabled:opacity-50">
              {loading ? <Loader2 className="animate-spin mx-auto" size={20} /> : "খসড়া হিসেবে রাখুন"}

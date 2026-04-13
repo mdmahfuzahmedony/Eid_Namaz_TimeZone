@@ -23,10 +23,8 @@ export default function Hero({ compact = false, onSearch }: HeroProps) {
         .hero-text-shadow { text-shadow: 0 4px 12px rgba(0,0,0,0.8); }
       `}</style>
 
-      {/* ব্যাকগ্রাউন্ড কালার সরিয়ে 'bg-transparent' করা হয়েছে */}
       <div className={`relative flex flex-col overflow-hidden transition-all duration-500 ${compact ? "min-h-[90px]" : "min-h-[500px] sm:min-h-[600px]"} bg-transparent`}>
         
-        {/* আগের হার্ডকোডেড ইমেজ এবং ওভারলেগুলো এখান থেকে সরিয়ে দেওয়া হয়েছে */}
         <div className="absolute bottom-0 left-0 right-0 h-40 z-[3] bg-gradient-to-t from-black/40 to-transparent" />
 
         {/* NAVBAR */}
@@ -59,6 +57,7 @@ export default function Hero({ compact = false, onSearch }: HeroProps) {
               জেলা থেকে গ্রাম পর্যন্ত — সারা বাংলাদেশের সব মসজিদের ঈদের জামাতের সময় এখন এক ক্লিকেই।
             </p>
 
+            {/* SEARCH BAR CONNECTION */}
             <div className="w-full flex justify-center transform hover:scale-[1.01] transition-transform duration-300">
               <SearchBar onSearch={onSearch} language="bn" />
             </div>
@@ -83,7 +82,7 @@ export default function Hero({ compact = false, onSearch }: HeroProps) {
         )}
       </div>
 
-      {/* MODAL (আগের মতোই) */}
+      {/* MODAL */}
       {showModal && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center px-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-300">
           <div className="relative z-10 w-full max-w-xl max-h-[90vh] overflow-y-auto rounded-[3rem] bg-slate-900 shadow-2xl border border-white/5 p-2">

@@ -17,7 +17,7 @@ export default function Footer({ language = "bn" }) {
     <footer className="w-full mt-24 border-t border-white/5 backdrop-blur-xl py-14 px-6 relative overflow-hidden">
       
       {/* টপ বর্ডার লাইট ইফেক্ট */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1/2 h-px bg-gradient-to-r from-transparent via-yellow-500/50 to-transparent"></div>
+      {/* <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1/2 h-px bg-gradient-to-r from-transparent via-yellow-500/50 to-transparent"></div> */}
 
       <div className="max-w-[1400px] mx-auto flex flex-col items-center text-center">
         

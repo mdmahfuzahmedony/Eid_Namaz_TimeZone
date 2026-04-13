@@ -54,168 +54,68 @@ export default function SearchBar({ onSearch, language }: any) {
       disabled: !upazila },
   ];
 
+  // ════════════════════════════════════════════════════════════
+  // স্পেস রিমুভ করার আপডেট করা লজিক
+  // ════════════════════════════════════════════════════════════
+  const handleSearchClick = () => {
+    // গ্রামের নামের আগের ও পরের স্পেস মুছে ফেলা হবে
+    // এবং মাঝখানের একাধিক স্পেসকে একটি স্পেসে রূপান্তর করা হবে
+    const cleanedGram = gram.trim().replace(/\s+/g, ' '); 
+
+    onSearch?.({ 
+        divisionId: division, 
+        districtId: district, 
+        upazilaId: upazila, 
+        unionId: union, 
+        gram: cleanedGram // একদম ক্লিন ডাটা পাঠানো হচ্ছে
+    });
+  };
+
   return (
     <>
       <style>{`
-        /* reset browser blue outline globally for this component */
         .sb * { box-sizing: border-box; }
-        .sb select:focus,
-        .sb input:focus { outline: none !important; box-shadow: none !important; }
-        .sb select:-moz-focusring { color: transparent; text-shadow: 0 0 0 #fff; }
-
-        /* ── root ── */
+        .sb select:focus, .sb input:focus { outline: none !important; }
         .sb { width: 100%; max-width: 900px; }
 
-        /* ══════════════════════════════
-           DESKTOP  (≥640px)  pill shape
-        ══════════════════════════════ */
         @media (min-width: 640px) {
           .sb-wrap {
-            display: flex;
-            align-items: stretch;
-            height: 58px;
-            background: rgba(255,255,255,0.09);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-            border: 1px solid rgba(255,255,255,0.2);
-            border-radius: 9999px;
-            box-shadow: 0 16px 40px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.13);
-            overflow: hidden;
+            display: flex; height: 52px; background: rgba(255,255,255,0.09);
+            backdrop-filter: blur(24px); border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 9999px; overflow: hidden;
           }
-
           .sb-seg {
-            display: flex;
-            align-items: center;
-            flex: 1;
-            padding: 0 18px;
-            border-right: 1px solid rgba(255,255,255,0.10);
-            position: relative;
-            min-width: 0;
-            transition: background 0.18s;
+            display: flex; align-items: center; flex: 1; padding: 0 15px;
+            border-right: 1px solid rgba(255,255,255,0.10); position: relative; min-width: 0;
           }
-          .sb-seg:not(.sb-seg--off):hover { background: rgba(255,255,255,0.07); }
           .sb-seg--gram { flex: 1.3; border-right: none; }
-
-          .sb-seg select,
-          .sb-seg input {
-            width: 100%;
-            background: transparent;
-            border: none;
-            outline: none;
-            appearance: none;
-            -webkit-appearance: none;
-            color: #fff;
-            font-size: 13.5px;
-            font-weight: 600;
-            cursor: pointer;
-            padding-right: 20px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+          .sb-seg select, .sb-seg input {
+            width: 100%; background: transparent; border: none; color: #fff;
+            font-size: 13px; font-weight: 600; cursor: pointer; padding-right: 15px;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
           }
-          .sb-seg select option         { background: #0f172a; color: #e2e8f0; }
-          .sb-seg select.ph-color       { color: rgba(255,255,255,0.45); }
-          .sb-seg select:disabled       { opacity: 0.3; cursor: not-allowed; }
-          .sb-seg input::placeholder    { color: rgba(255,255,255,0.4); font-weight: 400; }
-
-          .sb-caret {
-            position: absolute;
-            right: 8px;
-            color: rgba(255,255,255,0.3);
-            pointer-events: none;
-          }
-          .sb-seg:not(.sb-seg--off):hover .sb-caret { color: rgba(253,224,71,0.7); }
-
+          .sb-seg select option { background: #0f172a; color: #e2e8f0; }
+          .sb-seg select.ph-color { color: rgba(255,255,255,0.4); }
+          .sb-caret { position: absolute; right: 8px; color: rgba(255,255,255,0.3); pointer-events: none; }
           .sb-btn {
-            display: flex; align-items: center; gap: 8px;
-            background: #eab308; color: #111;
-            font-size: 13px; font-weight: 800; letter-spacing: 0.04em;
-            text-transform: uppercase;
-            padding: 0 28px; border: none; cursor: pointer;
-            border-radius: 0 9999px 9999px 0;
-            transition: background 0.18s, transform 0.12s;
-            white-space: nowrap; flex-shrink: 0;
+            display: flex; align-items: center; gap: 8px; background: #eab308; color: #111;
+            font-size: 12px; font-weight: 800; text-transform: uppercase;
+            padding: 0 24px; border: none; cursor: pointer; transition: all 0.2s;
           }
-          .sb-btn:hover  { background: #fbbf24; }
-          .sb-btn:active { transform: scale(0.97); }
+          .sb-btn:hover { background: #fbbf24; }
         }
 
-        /* ══════════════════════════════
-           MOBILE  (<640px)  card style
-        ══════════════════════════════ */
         @media (max-width: 639px) {
-          .sb-wrap {
-            background: rgba(255,255,255,0.09);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-            border: 1px solid rgba(255,255,255,0.18);
-            border-radius: 20px;
-            box-shadow: 0 16px 40px rgba(0,0,0,0.45);
-            overflow: hidden;
-          }
-
-          .sb-seg {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 0 16px;
-            height: 48px;
-            border-bottom: 1px solid rgba(255,255,255,0.08);
-            position: relative;
-          }
-          /* icon left indicator */
-          .sb-seg::before {
-            content: '';
-            width: 3px; height: 18px;
-            border-radius: 99px;
-            background: rgba(234,179,8,0.5);
-            flex-shrink: 0;
-          }
-          .sb-seg--off::before { background: rgba(255,255,255,0.1); }
-
-          .sb-seg select,
-          .sb-seg input {
-            flex: 1;
-            background: transparent;
-            border: none;
-            outline: none;
-            appearance: none;
-            -webkit-appearance: none;
-            color: #fff;
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-            padding-right: 24px;
-          }
-          .sb-seg select option         { background: #0f172a; color: #e2e8f0; }
-          .sb-seg select.ph-color       { color: rgba(255,255,255,0.42); }
-          .sb-seg select:disabled       { opacity: 0.3; cursor: not-allowed; }
-          .sb-seg input::placeholder    { color: rgba(255,255,255,0.38); font-weight: 400; }
-
-          .sb-caret {
-            position: absolute;
-            right: 14px;
-            color: rgba(255,255,255,0.28);
-            pointer-events: none;
-          }
-
-          .sb-btn {
-            display: flex; align-items: center; justify-content: center; gap-8px;
-            width: 100%; height: 52px;
-            background: #eab308; color: #111;
-            font-size: 14px; font-weight: 800; letter-spacing: 0.04em;
-            text-transform: uppercase;
-            border: none; cursor: pointer; gap: 8px;
-            transition: background 0.18s;
-          }
-          .sb-btn:hover  { background: #fbbf24; }
-          .sb-btn:active { background: #ca8a04; }
+          .sb-wrap { background: rgba(255,255,255,0.09); border-radius: 20px; overflow: hidden; }
+          .sb-seg { display: flex; align-items: center; gap: 10px; padding: 0 16px; height: 46px; border-bottom: 1px solid rgba(255,255,255,0.08); }
+          .sb-seg::before { content: ''; width: 3px; height: 14px; background: #eab308; border-radius: 10px; }
+          .sb-seg select, .sb-seg input { flex: 1; background: transparent; border: none; color: #fff; font-size: 13px; font-weight: 600; }
+          .sb-btn { width: 100%; height: 50px; background: #eab308; color: #111; font-size: 14px; font-weight: 800; display: flex; align-items: center; justify-content: center; gap: 8px; border: none; }
         }
       `}</style>
 
       <div className="sb">
         <div className="sb-wrap">
-
           {fields.map(f => (
             <div key={f.key} className={`sb-seg${f.disabled ? " sb-seg--off" : ""}`}>
               <select
@@ -230,29 +130,24 @@ export default function SearchBar({ onSearch, language }: any) {
                   <option key={o.id} value={o.id}>{o.label}</option>
                 ))}
               </select>
-              {!f.disabled && <ChevronDown size={13} className="sb-caret" />}
+              {!f.disabled && <ChevronDown size={12} className="sb-caret" />}
             </div>
           ))}
 
-          {/* Gram */}
           <div className="sb-seg sb-seg--gram">
             <input
               type="text"
               value={gram}
               placeholder={L.gramPh}
               onChange={e => setGram(e.target.value)}
-              onKeyDown={e => e.key === "Enter" && onSearch?.({ division, district, upazila, union, gram })}
+              onKeyDown={e => e.key === "Enter" && handleSearchClick()}
             />
           </div>
 
-          <button
-            className="sb-btn"
-            onClick={() => onSearch?.({ division, district, upazila, union, gram })}
-          >
-            <Search size={16} strokeWidth={2.8} />
+          <button className="sb-btn" onClick={handleSearchClick}>
+            <Search size={15} strokeWidth={3} />
             <span>{L.search}</span>
           </button>
-
         </div>
       </div>
     </>

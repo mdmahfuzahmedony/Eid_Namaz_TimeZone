@@ -11,35 +11,35 @@ export default function Home() {
   const [lang, setLang] = useState("bn");
 
   useEffect(() => {
-    // ✅ Page load এ saved theme apply করা
     const savedTheme = localStorage.getItem("theme");
     if (savedTheme === "dark") {
       setDarkMode(true);
       document.documentElement.classList.add("dark");
     } else {
-      // light mode নিশ্চিত করা
       document.documentElement.classList.remove("dark");
     }
   }, []);
 
-  const toggleTheme = () => {
-    const newMode = !darkMode;
-    setDarkMode(newMode);
-    if (newMode) {
-      document.documentElement.classList.add("dark");
-      localStorage.setItem("theme", "dark");
+  // --- নতুন ফাংশন: এটি সার্চ বার থেকে ডাটা নিয়ে স্টেট আপডেট করবে ---
+  const handleSearch = (filters: any) => {
+    // চেক করা হচ্ছে সব ফিল্ড খালি কি না
+    const hasData = Object.values(filters).some(val => val !== "");
+    
+    if (hasData) {
+      setSearchFilters(filters); // ডাটা থাকলে ফিল্টার সেট হবে
     } else {
-      document.documentElement.classList.remove("dark");
-      localStorage.setItem("theme", "light");
+      setSearchFilters(null); // ডাটা না থাকলে নাল হবে (রিসেন্ট ডাটা দেখাবে)
     }
   };
 
   return (
     <main className="min-h-screen transition-colors duration-500 bg-[var(--background)] text-[var(--foreground)]">
-      <Hero
-      />
+      
+      {/* ১. এখানে onSearch প্রপসটি পাস করতে হবে */}
+      <Hero onSearch={handleSearch} />
 
       <div className="container mx-auto py-4">
+        {/* ২. এখানে স্টেটটি লিস্টে যাচ্ছে */}
         <MasjidList searchFilters={searchFilters} />
       </div>
 

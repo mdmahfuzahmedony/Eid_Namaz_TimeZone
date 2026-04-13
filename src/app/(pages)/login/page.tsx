@@ -2,15 +2,14 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Phone, Lock, User as UserIcon, ArrowRight, Loader2, Smartphone, Upload, MapPin, X, CheckCircle, UserPlus, LogIn } from "lucide-react";
+import Image from "next/image"; // লোগোর জন্য
+import { Phone, Lock, User as UserIcon, ArrowRight, Loader2, Upload, MapPin, UserPlus, LogIn } from "lucide-react";
 import { toast } from "react-toastify";
 import { signIn } from "next-auth/react"; 
 
-// অ্যাকশনসমূহ
 import { registerUser } from "@/app/actions/users"; 
 import { uploadImage } from "@/app/actions/uploadAction"; 
 
-// ডাটা ফাইলসমূহ
 import divisionsData from "@/app/data/divisions.json";
 import districtsData from "@/app/data/districts.json";
 import upazilasData from "@/app/data/upazilas.json";
@@ -36,7 +35,6 @@ export default function AuthPage() {
   const [filteredUpazilas, setFilteredUpazilas] = useState<any[]>([]);
   const [filteredUnions, setFilteredUnions] = useState<any[]>([]);
 
-  // ফিল্টারিং লজিক (আগের মতোই ফিক্সড)
   const handleDivisionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const divId = e.target.value;
     const divName = divisionsData.find(d => d.id === divId)?.bn_name || "";
@@ -61,7 +59,7 @@ export default function AuthPage() {
     const upzName = upazilasData.find(u => u.id === upzId)?.bn_name || "";
     setFormData({ ...formData, upazila: upzName, union: "" });
     if (upzId) {
-      const unns = unionsData.filter(un => String(un.upazilla_id) === String(upzId) || String(un.upazilla_id) === String(upzId));
+      const unns = unionsData.filter(un => String(un.upazilla_id) === String(upzId));
       setFilteredUnions(unns);
     } else setFilteredUnions([]);
   };
@@ -89,113 +87,149 @@ export default function AuthPage() {
     } catch (err) { toast.error("সার্ভার এরর!"); } finally { setLoading(false); }
   };
 
-  const inputClass = "w-full bg-slate-900/50 border border-white/10 rounded-2xl px-12 py-4 text-sm outline-none focus:border-yellow-500 focus:bg-slate-900 transition-all text-white placeholder:text-slate-500";
-  const selectClass = "w-full bg-slate-900/50 border border-white/10 rounded-2xl px-12 py-4 text-sm outline-none focus:border-yellow-500 focus:bg-slate-900 transition-all text-white appearance-none cursor-pointer disabled:opacity-30";
+  const inputClass = "mt-1 w-full bg-[#1e293b]/50 border border-white/5 rounded-xl pl-10 pr-4 py-3 text-[13px] outline-none focus:border-yellow-500/50 transition-all text-white placeholder:text-slate-600 font-medium";
+  const selectClass = "mt-1 w-full bg-[#1e293b]/50 border border-white/5 rounded-xl pl-10 pr-4 py-3 text-[13px] outline-none focus:border-yellow-500/50 transition-all text-white appearance-none cursor-pointer disabled:opacity-30 font-medium";
+  const labelClass = "text-[11px] font-bold text-slate-500 uppercase tracking-widest flex items-center gap-2 ml-1";
 
   return (
-    <div className="relative min-h-screen flex items-center justify-center p-4 overflow-hidden font-sans">
+    <div className="relative min-h-screen flex items-center justify-center p-4 sm:p-6 font-sans">
       
-      {/* ═══════════ BACKGROUND IMAGE & OVERLAY ═══════════ */}
+      {/* ব্যাকগ্রাউন্ড */}
       <div className="absolute inset-0 z-0">
-        <img src="/hero-bg.jpg" alt="Background" className="w-full h-full object-cover scale-105" />
-        <div className="absolute inset-0 bg-slate-950/80 backdrop-blur-sm" />
+        <img src="/hero-bg.jpg" alt="Background" className="w-full h-full object-cover" />
+        <div className="absolute inset-0 bg-slate-950/30 backdrop-blur-sm" />
       </div>
 
-      {/* ═══════════ AUTH CARD ═══════════ */}
-      <div className={`relative z-10 w-full ${isLogin ? 'max-w-md' : 'max-w-2xl'} bg-white/5 backdrop-blur-xl p-8 sm:p-10 rounded-[3rem] border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] animate-in fade-in zoom-in-95 duration-700`}>
+      {/* অথ কার্ড - সলিড ব্যাকগ্রাউন্ড এবং লোগো সহ */}
+      <div className={`relative z-10 w-full ${isLogin ? 'max-w-[420px]' : 'max-w-[680px]'} bg-[#0f172a] p-8 sm:p-12 rounded-[2.5rem] border border-white/5 shadow-2xl animate-in fade-in zoom-in-95 duration-500 my-10`}>
         
-        <div className="text-center mb-8 space-y-3">
-          <div className="mx-auto w-16 h-16 bg-yellow-500 rounded-2xl flex items-center justify-center shadow-lg shadow-yellow-500/20 rotate-3">
-            {isLogin ? <LogIn className="text-black" size={30} /> : <UserPlus className="text-black" size={30} />}
+        {/* লোগো সেকশন */}
+        <div className="flex flex-col items-center mb-8">
+          <div className="relative w-20 h-20 mb-4">
+             <Image 
+                src="/logo.png" 
+                alt="Logo" 
+                fill 
+                className="object-contain drop-shadow-[0_0_10px_rgba(234,179,8,0.2)]" 
+             />
           </div>
-          <h2 className="text-3xl font-black text-white">{isLogin ? "স্বাগতম" : "নতুন মেম্বার"}</h2>
-          <p className="text-xs text-slate-400 font-medium">ঈদের নামাজের সময়সূচি জানতে আপনার তথ্য দিন</p>
+          <h2 className="text-xl font-black text-white italic">{isLogin ? "আবার স্বাগতম" : "নতুন একাউন্ট খুলুন"}</h2>
+         
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-5">
+        <form onSubmit={handleSubmit} className="space-y-4">
           {!isLogin ? (
-            /* ══════════ REGISTER FORM (Side by Side Grid) ══════════ */
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="relative">
-                <UserIcon className="absolute left-4 top-1/2 -translate-y-1/2 text-yellow-500" size={18} />
-                <input type="text" placeholder="পূর্ণ নাম" className={inputClass} value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value})} required />
+            /* রেজিস্ট্রেশন গ্রিড */
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
+              <div className="flex flex-col">
+                <label className={labelClass}><UserIcon size={12} /> আপনার নাম</label>
+                <div className="relative">
+                  <UserIcon className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-600" size={15} />
+                  <input type="text" placeholder="এখানে লিখুন..." className={inputClass} value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value})} required />
+                </div>
               </div>
 
-              <div className="relative">
-                <label className={`${inputClass} flex items-center gap-3 cursor-pointer overflow-hidden border-dashed`}>
-                  <Upload className="absolute left-4 top-1/2 -translate-y-1/2 text-yellow-500" size={18} />
-                  <span className="truncate text-slate-400">{selectedFile ? selectedFile.name : "প্রোফাইল ছবি"}</span>
+              <div className="flex flex-col">
+                <label className={labelClass}><Upload size={12} /> প্রোফাইল ছবি</label>
+                <label className={`${inputClass} flex items-center gap-3 cursor-pointer overflow-hidden border-dashed border-white/10`}>
+                  
+                  <span className="truncate text-slate-600 ml-2">{selectedFile ? selectedFile.name : "সিলেক্ট করুন..."}</span>
                   <input type="file" accept="image/*" className="hidden" onChange={(e) => setSelectedFile(e.target.files?.[0] || null)} />
                 </label>
               </div>
 
-              <div className="relative">
-                <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 text-yellow-500" size={18} />
-                <select className={selectClass} onChange={handleDivisionChange} required>
-                  <option value="">বিভাগ নির্বাচন</option>
-                  {divisionsData.map((d: any) => <option key={d.id} value={d.id}>{d.bn_name}</option>)}
-                </select>
+              <div className="flex flex-col">
+                <label className={labelClass}><MapPin size={12} /> বিভাগ</label>
+                <div className="relative">
+                  <MapPin className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-600" size={15} />
+                  <select className={selectClass} onChange={handleDivisionChange} required>
+                    <option value="" className="bg-slate-900">সিলেক্ট বিভাগ</option>
+                    {divisionsData.map((d: any) => <option key={d.id} value={d.id} className="bg-slate-900">{d.bn_name}</option>)}
+                  </select>
+                </div>
               </div>
 
-              <div className="relative">
-                <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 text-yellow-500" size={18} />
-                <select className={selectClass} onChange={handleDistrictChange} disabled={!filteredDistricts.length} required>
-                  <option value="">জেলা নির্বাচন</option>
-                  {filteredDistricts.map((d: any) => <option key={d.id} value={d.id}>{d.bn_name}</option>)}
-                </select>
+              <div className="flex flex-col">
+                <label className={labelClass}><MapPin size={12} /> জেলা</label>
+                <div className="relative">
+                  <MapPin className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-600" size={15} />
+                  <select className={selectClass} onChange={handleDistrictChange} disabled={!filteredDistricts.length} required>
+                    <option value="" className="bg-slate-900">সিলেক্ট জেলা</option>
+                    {filteredDistricts.map((d: any) => <option key={d.id} value={d.id} className="bg-slate-900">{d.bn_name}</option>)}
+                  </select>
+                </div>
               </div>
 
-              <div className="relative">
-                <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 text-yellow-500" size={18} />
-                <select className={selectClass} onChange={handleUpazilaChange} disabled={!filteredUpazilas.length} required>
-                  <option value="">উপজেলা নির্বাচন</option>
-                  {filteredUpazilas.map((u: any) => <option key={u.id} value={u.id}>{u.bn_name}</option>)}
-                </select>
+              <div className="flex flex-col">
+                <label className={labelClass}><MapPin size={12} /> উপজেলা</label>
+                <div className="relative">
+                  <MapPin className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-600" size={15} />
+                  <select className={selectClass} onChange={handleUpazilaChange} disabled={!filteredUpazilas.length} required>
+                    <option value="" className="bg-slate-900">সিলেক্ট উপজেলা</option>
+                    {filteredUpazilas.map((u: any) => <option key={u.id} value={u.id} className="bg-slate-900">{u.bn_name}</option>)}
+                  </select>
+                </div>
               </div>
 
-              <div className="relative">
-                <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 text-yellow-500" size={18} />
-                <select className={selectClass} onChange={(e) => setFormData({...formData, union: unionsData.find(un => un.id === e.target.value)?.bn_name || ""})} disabled={!filteredUnions.length} required>
-                  <option value="">ইউনিয়ন নির্বাচন</option>
-                  {filteredUnions.map((un: any) => <option key={un.id} value={un.id}>{un.bn_name}</option>)}
-                </select>
+              <div className="flex flex-col">
+                <label className={labelClass}><MapPin size={12} /> ইউনিয়ন</label>
+                <div className="relative">
+                  <MapPin className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-600" size={15} />
+                  <select className={selectClass} onChange={(e) => setFormData({...formData, union: unionsData.find(un => un.id === e.target.value)?.bn_name || ""})} disabled={!filteredUnions.length} required>
+                    <option value="" className="bg-slate-900">সিলেক্ট ইউনিয়ন</option>
+                    {filteredUnions.map((un: any) => <option key={un.id} value={un.id} className="bg-slate-900">{un.bn_name}</option>)}
+                  </select>
+                </div>
               </div>
 
-              <div className="relative">
-                <Phone className="absolute left-4 top-1/2 -translate-y-1/2 text-yellow-500" size={18} />
-                <input type="tel" placeholder="মোবাইল নম্বর" className={inputClass} value={formData.phoneNumber} onChange={(e) => setFormData({...formData, phoneNumber: e.target.value})} required />
+              <div className="flex flex-col">
+                <label className={labelClass}><Phone size={12} /> মোবাইল নম্বর</label>
+                <div className="relative">
+                  <Phone className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-600" size={15} />
+                  <input type="tel" placeholder="০১৭XXXXXXXX" className={inputClass} value={formData.phoneNumber} onChange={(e) => setFormData({...formData, phoneNumber: e.target.value})} required />
+                </div>
               </div>
 
-              <div className="relative">
-                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-yellow-500" size={18} />
-                <input type="password" placeholder="পাসওয়ার্ড" className={inputClass} value={formData.password} onChange={(e) => setFormData({...formData, password: e.target.value})} required />
+              <div className="flex flex-col">
+                <label className={labelClass}><Lock size={12} /> পাসওয়ার্ড</label>
+                <div className="relative">
+                  <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-600" size={15} />
+                  <input type="password" placeholder="******" className={inputClass} value={formData.password} onChange={(e) => setFormData({...formData, password: e.target.value})} required />
+                </div>
               </div>
             </div>
           ) : (
-            /* ══════════ LOGIN FORM (Single Column) ══════════ */
-            <div className="space-y-4">
-              <div className="relative">
-                <Phone className="absolute left-4 top-1/2 -translate-y-1/2 text-yellow-500" size={18} />
-                <input type="tel" placeholder="মোবাইল নম্বর" className={inputClass} value={formData.phoneNumber} onChange={(e) => setFormData({...formData, phoneNumber: e.target.value})} required />
+            /* লগইন ফর্ম */
+            <div className="space-y-5 max-w-[340px] mx-auto w-full">
+              <div className="flex flex-col">
+                <label className={labelClass}><Phone size={12} /> মোবাইল নম্বর</label>
+                <div className="relative">
+                  <Phone className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-600" size={15} />
+                  <input type="tel" placeholder="০১৭XXXXXXXX" className={inputClass} value={formData.phoneNumber} onChange={(e) => setFormData({...formData, phoneNumber: e.target.value})} required />
+                </div>
               </div>
-              <div className="relative">
-                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-yellow-500" size={18} />
-                <input type="password" placeholder="পাসওয়ার্ড" className={inputClass} value={formData.password} onChange={(e) => setFormData({...formData, password: e.target.value})} required />
+              <div className="flex flex-col">
+                <label className={labelClass}><Lock size={12} /> পাসওয়ার্ড</label>
+                <div className="relative">
+                  <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-600" size={15} />
+                  <input type="password" placeholder="******" className={inputClass} value={formData.password} onChange={(e) => setFormData({...formData, password: e.target.value})} required />
+                </div>
               </div>
             </div>
           )}
 
-          <button type="submit" disabled={loading} className="w-full bg-yellow-500 hover:bg-yellow-400 text-black py-5 rounded-[2rem] font-black shadow-xl shadow-yellow-500/20 flex items-center justify-center gap-3 transition-all active:scale-95 disabled:opacity-50 text-base">
-            {loading ? <Loader2 className="animate-spin" size={20} /> : (isLogin ? "লগইন করুন" : "রেজিস্ট্রেশন করুন")}
-            {!loading && <ArrowRight size={20} />}
+          <button type="submit" disabled={loading} className="w-full max-w-[340px] mx-auto bg-yellow-500 hover:bg-yellow-400 text-black py-4 rounded-xl font-black shadow-lg shadow-yellow-500/10 flex items-center justify-center gap-2 transition-all active:scale-95 disabled:opacity-50 text-sm mt-6">
+            {loading ? <Loader2 className="animate-spin" size={18} /> : (isLogin ? "লগইন করুন" : "রেজিস্ট্রেশন করুন")}
+            {!loading && <ArrowRight size={16} />}
           </button>
         </form>
 
-        <div className="text-center mt-8">
-          <p className="text-sm text-slate-400 font-medium">
+        {/* টগল বাটন */}
+        <div className="text-center mt-10">
+          <p className="text-[12px] text-slate-500 font-bold">
             {isLogin ? "একাউন্ট নেই?" : "ইতিমধ্যে একাউন্ট আছে?"}
-            <button type="button" onClick={() => setIsLogin(!isLogin)} className="ml-2 text-yellow-500 font-black hover:underline transition-all">
-              {isLogin ? "নতুন খুলুন" : "লগইন করুন"}
+            <button type="button" onClick={() => setIsLogin(!isLogin)} className="ml-2 text-yellow-500 font-black hover:text-yellow-400 transition-all border-b border-yellow-500/20">
+              {isLogin ? "নতুন একাউন্ট খুলুন" : "লগইন করুন"}
             </button>
           </p>
         </div>
