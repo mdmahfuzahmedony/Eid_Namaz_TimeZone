@@ -133,8 +133,8 @@ export default function AddMasjid({ language = "bn", editData, onSuccess }: Prop
         {/* নাম ও ধরন */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           <div className="flex flex-col">
-            <label className={labelClass}><Building2 size={12} /> নাম *</label>
-            <input value={name} onChange={e => setName(e.target.value)} placeholder="প্রতিষ্ঠানের নাম" className={inputClass} />
+            <label className={labelClass}><Building2 size={12} /> ঈদগাহ/মসজিদ/মাঠের নাম দিন *</label>
+            <input value={name} onChange={e => setName(e.target.value)} placeholder="এই খানে লিখুন" className={inputClass} />
           </div>
           <div className="flex flex-col">
             <label className={labelClass}><Hash size={12} /> ধরন নির্বাচন করুন *</label>
@@ -148,28 +148,28 @@ export default function AddMasjid({ language = "bn", editData, onSuccess }: Prop
         <div className="bg-slate-900/50 p-6 rounded-[2.5rem] border border-slate-800 space-y-5 shadow-2xl">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
             <div>
-              <label className={labelClass}>বিভাগ *</label>
+             
               <select value={divisionId} onChange={e => setDivisionId(e.target.value)} className={selectClass}>
                 <option value="" className="bg-slate-900">সিলেক্ট বিভাগ</option>
                 {divisionsData.map((d: any) => <option key={d.id} value={d.id} className="bg-slate-900">{nameOf(d)}</option>)}
               </select>
             </div>
             <div>
-              <label className={labelClass}>জেলা *</label>
+             
               <select value={districtId} onChange={e => setDistrictId(e.target.value)} disabled={!divisionId} className={selectClass}>
                 <option value="" className="bg-slate-900">সিলেক্ট জেলা</option>
                 {districts.map((d: any) => <option key={d.id} value={d.id} className="bg-slate-900">{nameOf(d)}</option>)}
               </select>
             </div>
             <div>
-              <label className={labelClass}>উপজেলা *</label>
+            
               <select value={upazilaId} onChange={e => setUpazilaId(e.target.value)} disabled={!districtId} className={selectClass}>
                 <option value="" className="bg-slate-900">সিলেক্ট উপজেলা</option>
                 {upazilas.map((u: any) => <option key={u.id} value={u.id} className="bg-slate-900">{nameOf(u)}</option>)}
               </select>
             </div>
             <div>
-              <label className={labelClass}>ইউনিয়ন *</label>
+            
               <select value={unionId} onChange={e => setUnionId(e.target.value)} disabled={!upazilaId} className={selectClass}>
                 <option value="" className="bg-slate-900">সিলেক্ট ইউনিয়ন</option>
                 {unions.map((u: any) => <option key={u.id} value={u.id} className="bg-slate-900">{nameOf(u)}</option>)}
