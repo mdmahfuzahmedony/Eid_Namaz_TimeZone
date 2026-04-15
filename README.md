@@ -1,6 +1,11 @@
+
+
+
 # 🌙 Eidgah BD - বাংলাদেশের ঈদের নামাজের সময়সূচি পোর্টাল
 
 **Eidgah BD** একটি আধুনিক ও শক্তিশালী ওয়েব অ্যাপ্লিকেশন, যা সারা বাংলাদেশের গ্রাম এবং শহর এলাকার ঈদের নামাজের সময়সূচি এবং ঈদগাহের তথ্য খুঁজে পেতে সাহায্য করে। এটি Next.js, Prisma এবং Tailwind CSS ব্যবহার করে তৈরি করা একটি পূর্ণাঙ্গ প্ল্যাটফর্ম।
+
+🔗 লাইভ লিঙ্ক: https://eid-namaz-time-zone.vercel.app/
 
 ![Project Banner](https://i.ibb.co.com/BVKCh1Dw/screencapture-eid-namaz-time-zone-vercel-app-2026-04-13-20-42-17.png)
 
