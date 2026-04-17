@@ -64,9 +64,9 @@ export default function Hero({ compact = false, onSearch }: HeroProps) {
 
             <div className="flex gap-10 sm:gap-20 mt-12">
               {[
-                { num: "১,২৪৩", label: "মসজিদ ও ঈদগাহ" },
+                { num: "৩৫০০০০+", label: "মসজিদ ও ঈদগাহ" },
                 { num: "৬৪",    label: "জেলা" },
-                { num: "৩,৮০০+", label: "গ্রাম" },
+                { num: "৯০,০৪৯+", label: "গ্রাম" },
               ].map((s, idx) => (
                 <div key={idx} className="text-center group cursor-default">
                   <div className="text-yellow-400 text-xl sm:text-3xl font-black transition-transform group-hover:scale-110">
