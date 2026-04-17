@@ -95,12 +95,13 @@ export default function Navbar({ onAddClick }: NavbarProps) {
       <nav className="relative z-50 w-full bg-transparent">
         <div className="max-w-[1400px] mx-auto flex items-center justify-between px-4 py-3 sm:py-4">
           
+         {/* ══════════════ লোগো সেকশন (EIDGA BD) ══════════════ */}
           <div className="flex items-center gap-2 cursor-pointer group shrink-0" onClick={() => router.push("/")}>
-            <div className="relative w-12 h-12 sm:w-16 sm:h-16 overflow-hidden">
+            <div className="relative w-10 h-10 sm:w-14 sm:h-14 overflow-hidden">
               <img src="/logo.png" alt="Logo" className="w-full h-full object-contain scale-110" />
             </div>
-            <div className="hidden xs:block text-white font-bold text-xs sm:text-sm leading-tight hero-text-shadow font-serif">
-              ঈদের নামাজ <br /> <span className="text-yellow-500">সময়সূচি</span>
+            <div className="text-white font-black text-lg sm:text-xl leading-tight hero-text-shadow font-serif tracking-tighter">
+              <p>EIDGHA <span className="text-yellow-500">BD</span></p> 
             </div>
           </div>
 

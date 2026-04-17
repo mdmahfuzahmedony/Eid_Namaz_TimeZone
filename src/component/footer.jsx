@@ -22,19 +22,15 @@ export default function Footer({ language = "bn" }) {
       <div className="max-w-[1400px] mx-auto flex flex-col items-center text-center">
         
         {/* ১. লোগো সেকশন */}
-        <div className="mb-6 flex flex-col items-center gap-4">
-          <div className="relative group">
-            {/* আপনার logo.png ফাইল */}
-            <Image 
-              src="/logo.png" 
-              alt="Eidgah BD Logo" 
-              width={80} 
-              height={80} 
-              className="w-20 h-20 object-contain drop-shadow-[0_0_15px_rgba(234,179,8,0.2)] group-hover:scale-110 transition-transform duration-300"
-            />
+      {/* ══════════════ লোগো সেকশন (EIDGA BD) ══════════════ */}
+          <div className="flex items-center gap-2 cursor-pointer group shrink-0" onClick={() => router.push("/")}>
+            <div className="relative w-10 h-10 sm:w-14 sm:h-14 overflow-hidden">
+              <img src="/logo.png" alt="Logo" className="w-full h-full object-contain scale-110" />
+            </div>
+            <div className="text-white font-black text-lg sm:text-xl leading-tight hero-text-shadow font-serif tracking-tighter">
+              <p>EIDGHA <span className="text-yellow-500">BD</span></p> 
+            </div>
           </div>
-         
-        </div>
 
         {/* ২. বর্ণনা */}
         <p className="max-w-md text-slate-400 text-[13px] leading-relaxed font-medium mb-8">
