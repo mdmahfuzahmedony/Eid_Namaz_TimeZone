@@ -14,11 +14,12 @@ model User {
   password     String
   image        String?  
   
-  // নতুন যোগ করা ফিল্ডসমূহ
   division     String?
   district     String?
   upazila      String?
   union        String?
+  pourashava   String?  // নতুন যোগ করুন
+  ward         String?  // নতুন যোগ করুন
 
   createdAt    DateTime @default(now())
   masjids      Masjid[]

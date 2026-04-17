@@ -7,7 +7,7 @@ import { revalidatePath } from "next/cache";
 // ১. রেজিস্ট্রেশন ফাংশন
 export async function registerUser(formData: any) {
   try {
-    const { name, phoneNumber, password, image, division, district, upazila, union } = formData;
+    const { name, phoneNumber, password, image, division, district, upazila, union, pourashava, ward } = formData;
 
     const existingUser = await prisma.user.findUnique({
       where: { phoneNumber },
@@ -29,6 +29,8 @@ export async function registerUser(formData: any) {
         district,
         upazila,
         union,
+        pourashava, // এখানে অ্যাড করুন
+        ward,       // এখানে অ্যাড করুন
       },
     });
 
