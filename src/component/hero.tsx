@@ -64,7 +64,7 @@ export default function Hero({ compact = false, onSearch }: HeroProps) {
 
             <div className="flex gap-10 sm:gap-20 mt-12">
               {[
-                { num: "৩৫০০০০+", label: "মসজিদ ও ঈদগাহ" },
+                { num: "৩,৫০০০০+", label: "মসজিদ ও ঈদগাহ" },
                 { num: "৬৪",    label: "জেলা" },
                 { num: "৯০,০৪৯+", label: "গ্রাম" },
               ].map((s, idx) => (
