@@ -101,7 +101,7 @@ export default function Navbar({ onAddClick }: NavbarProps) {
               <img src="/logo.png" alt="Logo" className="w-full h-full object-contain scale-110" />
             </div>
             <div className="text-white font-black text-lg sm:text-xl leading-tight hero-text-shadow font-serif tracking-tighter">
-              <p>EIDGHA <span className="text-yellow-500">BD</span></p> 
+              <p>EIDGAH <span className="text-yellow-500">BD</span></p> 
             </div>
           </div>
 
